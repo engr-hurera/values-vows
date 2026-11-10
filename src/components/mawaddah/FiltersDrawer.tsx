@@ -40,7 +40,7 @@ export function FiltersDrawer({ trigger }: { trigger?: React.ReactNode }) {
           </button>
         )}
       </SheetTrigger>
-      <SheetContent side="bottom" className="mx-auto h-[92vh] max-w-md gap-0 overflow-hidden rounded-t-[2rem] border-0 bg-primary p-0 [&>button]:hidden">
+      <SheetContent side="bottom" className="mx-auto flex h-[88vh] max-w-md flex-col gap-0 overflow-hidden rounded-t-[2rem] border-0 bg-primary p-0 [&>button]:hidden">
         <div className="flex h-16 shrink-0 items-center justify-between px-5 text-primary-foreground/70">
           <span className="text-sm font-bold">Discover</span>
           <button onClick={() => setOpen(false)} aria-label="Close filters"><X className="h-5 w-5" /></button>

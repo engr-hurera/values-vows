@@ -107,7 +107,7 @@ function ProfileView() {
           <section className="space-y-2">
             <h3 className="text-xs font-bold text-muted-foreground">Languages & Background</h3>
             <div className="flex flex-wrap gap-2">
-              {[...p.languages, p.tribe].map((i, k) => <span key={k} className="rounded-full border border-border bg-secondary px-3 py-1.5 text-xs font-bold">{i}</span>)}
+              {[...new Set([...p.languages, p.tribe])].map((i, k) => <span key={k} className="rounded-full border border-border bg-secondary px-3 py-1.5 text-xs font-bold">{i}</span>)}
             </div>
           </section>
         </div>

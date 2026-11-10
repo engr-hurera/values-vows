@@ -123,6 +123,25 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
+  // After a rebuild, old page chunks can disappear; reload once instead of blanking.
+  useEffect(() => {
+    const onFail = (e: Event | PromiseRejectionEvent) => {
+      const msg = String((e as PromiseRejectionEvent).reason?.message ?? (e as ErrorEvent).message ?? "");
+      if (e.type !== "vite:preloadError" && !msg.includes("dynamically imported module")) return;
+      if (sessionStorage.getItem("chunk-reload")) return;
+      sessionStorage.setItem("chunk-reload", "1");
+      window.location.reload();
+    };
+    const clear = setTimeout(() => sessionStorage.removeItem("chunk-reload"), 10000);
+    window.addEventListener("vite:preloadError", onFail);
+    window.addEventListener("unhandledrejection", onFail);
+    return () => {
+      clearTimeout(clear);
+      window.removeEventListener("vite:preloadError", onFail);
+      window.removeEventListener("unhandledrejection", onFail);
+    };
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}

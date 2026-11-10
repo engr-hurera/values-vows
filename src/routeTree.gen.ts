@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as DiscoverRouteImport } from './routes/discover'
 import { Route as FeedRouteImport } from './routes/feed'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
+import { Route as SecurityRouteImport } from './routes/security'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SigninRouteImport } from './routes/signin'
 import { Route as ProfileIdRouteImport } from './routes/profile.$id'
@@ -37,6 +38,11 @@ const OnboardingRoute = OnboardingRouteImport.update({
   path: '/onboarding',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SecurityRoute = SecurityRouteImport.update({
+  id: '/security',
+  path: '/security',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -58,6 +64,7 @@ export interface FileRoutesByFullPath {
   '/discover': typeof DiscoverRoute
   '/feed': typeof FeedRoute
   '/onboarding': typeof OnboardingRoute
+  '/security': typeof SecurityRoute
   '/settings': typeof SettingsRoute
   '/signin': typeof SigninRoute
   '/profile/$id': typeof ProfileIdRoute
@@ -67,6 +74,7 @@ export interface FileRoutesByTo {
   '/discover': typeof DiscoverRoute
   '/feed': typeof FeedRoute
   '/onboarding': typeof OnboardingRoute
+  '/security': typeof SecurityRoute
   '/settings': typeof SettingsRoute
   '/signin': typeof SigninRoute
   '/profile/$id': typeof ProfileIdRoute
@@ -77,6 +85,7 @@ export interface FileRoutesById {
   '/discover': typeof DiscoverRoute
   '/feed': typeof FeedRoute
   '/onboarding': typeof OnboardingRoute
+  '/security': typeof SecurityRoute
   '/settings': typeof SettingsRoute
   '/signin': typeof SigninRoute
   '/profile/$id': typeof ProfileIdRoute
@@ -88,6 +97,7 @@ export interface FileRouteTypes {
     | '/discover'
     | '/feed'
     | '/onboarding'
+    | '/security'
     | '/settings'
     | '/signin'
     | '/profile/$id'
@@ -97,6 +107,7 @@ export interface FileRouteTypes {
     | '/discover'
     | '/feed'
     | '/onboarding'
+    | '/security'
     | '/settings'
     | '/signin'
     | '/profile/$id'
@@ -106,6 +117,7 @@ export interface FileRouteTypes {
     | '/discover'
     | '/feed'
     | '/onboarding'
+    | '/security'
     | '/settings'
     | '/signin'
     | '/profile/$id'
@@ -116,6 +128,7 @@ export interface RootRouteChildren {
   DiscoverRoute: typeof DiscoverRoute
   FeedRoute: typeof FeedRoute
   OnboardingRoute: typeof OnboardingRoute
+  SecurityRoute: typeof SecurityRoute
   SettingsRoute: typeof SettingsRoute
   SigninRoute: typeof SigninRoute
   ProfileIdRoute: typeof ProfileIdRoute
@@ -151,6 +164,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OnboardingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/security': {
+      id: '/security'
+      path: '/security'
+      fullPath: '/security'
+      preLoaderRoute: typeof SecurityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/settings': {
       id: '/settings'
       path: '/settings'
@@ -180,6 +200,7 @@ const rootRouteChildren: RootRouteChildren = {
   DiscoverRoute: DiscoverRoute,
   FeedRoute: FeedRoute,
   OnboardingRoute: OnboardingRoute,
+  SecurityRoute: SecurityRoute,
   SettingsRoute: SettingsRoute,
   SigninRoute: SigninRoute,
   ProfileIdRoute: ProfileIdRoute,

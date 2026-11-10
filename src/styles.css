@@ -87,31 +87,31 @@
 :root {
   --radius: 1rem;
   /* Espresso Roast & Desert Linen */
-  --background: oklch(0.982 0.006 70);
-  --foreground: oklch(0.225 0.012 30);
+  --background: #FAF7F3;
+  --foreground: #261E1C;
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.225 0.012 30);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.225 0.012 30);
-  --primary: oklch(0.225 0.012 30);
-  --primary-soft: oklch(0.3 0.015 30);
+  --primary: #261E1C;
+  --primary-soft: #382D2A;
   --primary-foreground: oklch(0.985 0.005 70);
-  --secondary: oklch(0.95 0.011 70);
+  --secondary: #F3EDE6;
   --secondary-foreground: oklch(0.225 0.012 30);
   --muted: oklch(0.95 0.011 70);
-  --muted-foreground: oklch(0.53 0.015 30);
-  --accent: oklch(0.6 0.12 40);
+  --muted-foreground: #7A6E6A;
+  --accent: #B86245;
   --accent-foreground: oklch(0.99 0 0);
-  --accent-light: oklch(0.959 0.014 40);
-  --accent-border: oklch(0.885 0.03 40);
-  --trust: oklch(0.45 0.05 150);
-  --trust-light: oklch(0.955 0.012 150);
-  --canvas: oklch(0.918 0.014 70);
+  --accent-light: #F9EEEA;
+  --accent-border: #EBD2C8;
+  --trust: #43614D;
+  --trust-light: #EBF2ED;
+  --canvas: #EAE3DC;
   --overlay: oklch(0.15 0.01 30);
   --on-photo: oklch(0.99 0 0);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.9 0.012 70);
+  --border: #E4DDD5;
   --input: oklch(0.9 0.012 70);
   --ring: oklch(0.6 0.12 40);
   --chart-1: oklch(0.6 0.12 40);
@@ -131,6 +131,19 @@
   --shadow-float: 0 8px 20px -6px color-mix(in oklab, var(--primary) 35%, transparent);
   --gradient-photo: linear-gradient(to top, color-mix(in oklab, var(--overlay) 88%, transparent), color-mix(in oklab, var(--overlay) 20%, transparent) 55%, color-mix(in oklab, var(--overlay) 15%, transparent));
 }
+
+/* Source showcase frame and status bar; colors retain its exact espresso values. */
+.reference-stage { min-height: 100svh; display: flex; align-items: center; justify-content: center; background: var(--canvas); padding: 24px 12px; }
+.reference-phone { width: 276px; min-height: 576px; border-radius: 40px; position: relative; overflow: hidden; display: flex; flex-direction: column; flex-shrink: 0; box-shadow: var(--shadow-card); }
+.ios-statusbar { height: 28px; padding: 6px 18px 0; display: flex; align-items: center; justify-content: space-between; font-size: 9px; font-weight: 700; flex-shrink: 0; z-index: 20; }
+.reference-phone input:not([type=file]) { min-width: 0; width: 100%; background: transparent; outline: none; }
+.reference-phone button { letter-spacing: 0; }
+.reference-phone button svg { width: revert-layer; height: revert-layer; }
+.reference-toggle { width: 30px; height: 17px; padding: 2px; }
+.reference-toggle > span { width: 13px; height: 13px; }
+.reference-toggle[data-state=checked] > span { transform: translateX(13px); }
+.reference-toggle[data-state=unchecked] > span { transform: translateX(0); }
+@media (max-width: 320px) { .reference-stage { padding: 0; } .reference-phone { width: 100%; min-height: 100svh; border-radius: 0; } }
 
 @layer base {
   * {

@@ -28,3 +28,7 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+- Reference onboarding uses the uploaded showcase's 276px phone frame, status bar, and screen geometry with semantic tokens, because fidelity is required rather than a redesigned layout.
+- Onboarding completion uses a versioned flag set only by registration or explicit sign-in; the index always renders splash, so stale demo sessions cannot bypass entry.
+- Liveness verification is a separate protected Settings destination and never assigns a badge without an actual provider result, because a visual prototype is not identity verification.

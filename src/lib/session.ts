@@ -8,9 +8,9 @@ export interface Account {
   dob: string;
   city: string;
   country: string;
-  guardianName?: string;
-  guardianWhatsapp?: string;
-  photo?: string;
+  guardianName?: string | undefined;
+  guardianWhatsapp?: string | undefined;
+  photo?: string | undefined;
   privacyBlur: boolean;
   sect: string;
   timeline: string;

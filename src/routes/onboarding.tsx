@@ -66,7 +66,7 @@ function Onboarding() {
 
   const next = () => {
     setError("");
-    if (!valid) { setError(["Please fill in every field.", "", "Please upload a photo from your device.", "Choose sect & timeline, a valid email and a password of 6+ characters."][step]); return; }
+    if (!valid) { setError(["Please fill in every field.", "", "Please upload a photo from your device.", "Choose sect & timeline, a valid email and a password of 6+ characters."][step] ?? ""); return; }
     if (step < 3) return setStep(step + 1);
     register({ gender: gender!, firstName: firstName.trim(), dob, city: city.trim(), country: country.trim(), guardianName: guardianName || undefined, guardianWhatsapp: guardianWhatsapp || undefined, photo, privacyBlur: gender === "woman" && blur, sect, timeline, email: email.trim(), password });
     navigate({ to: "/feed", replace: true });

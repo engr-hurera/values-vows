@@ -2,13 +2,14 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Heart, MapPin, RotateCcw, Star, X } from "lucide-react";
 import { useState } from "react";
 import { BottomNav, PhoneShell } from "@/components/mawaddah/BottomNav";
+import { useRequireAccount } from "@/lib/session";
 import { FiltersDrawer } from "@/components/mawaddah/FiltersDrawer";
 import { ProfilePhoto } from "@/components/mawaddah/ProfilePhoto";
 import { actions, useDiscovery } from "@/lib/discovery-store";
 import { applyFilters, badgesFor, PROFILES } from "@/lib/profiles";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/feed")({
   head: () => ({
     meta: [
       { title: "Discover Partners — Mawaddah" },
@@ -23,11 +24,13 @@ export const Route = createFileRoute("/")({
 });
 
 function Feed() {
+  const ready = useRequireAccount();
   const { filters, dismissed, bookmarked } = useDiscovery();
   const [tab, setTab] = useState<"daily" | "search">("search");
   const [liked, setLiked] = useState<string | null>(null);
   const list = applyFilters(PROFILES, filters).filter((p) => !dismissed.includes(p.id));
   const p = list[0];
+  if (!ready) return null;
 
   return (
     <PhoneShell>

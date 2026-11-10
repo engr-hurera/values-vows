@@ -75,7 +75,7 @@ function ProfileView() {
           <ProfilePhoto profile={p} />
           <div className="pointer-events-none absolute inset-0 bg-photo-fade" />
           <div className="absolute inset-x-4 top-4 flex items-center justify-between text-on-photo">
-            <Link to="/" aria-label="Back" className="glass-dark flex h-10 w-10 items-center justify-center rounded-full"><ArrowLeft className="h-4 w-4" /></Link>
+            <Link to="/feed" aria-label="Back" className="glass-dark flex h-10 w-10 items-center justify-center rounded-full"><ArrowLeft className="h-4 w-4" /></Link>
             <span className="glass-dark flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-bold"><MapPin className="h-3 w-3" />{p.distanceKm} km</span>
           </div>
           <div className="pointer-events-none absolute inset-x-4 bottom-8 space-y-1.5 text-center text-on-photo">

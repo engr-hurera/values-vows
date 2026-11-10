@@ -51,7 +51,7 @@ function Discover() {
           return (
             <button
               key={v.key}
-              onClick={() => { actions.setFilters({ ...filters, value: on ? null : v.key }); if (!on) navigate({ to: "/" }); }}
+              onClick={() => { actions.setFilters({ ...filters, value: on ? null : v.key }); if (!on) navigate({ to: "/feed" }); }}
               className={cn("flex w-full items-center justify-between gap-3 rounded-2xl border-b border-border px-2 py-4 text-left transition hover:bg-secondary", on && "bg-accent-light")}
             >
               <div className="space-y-2">

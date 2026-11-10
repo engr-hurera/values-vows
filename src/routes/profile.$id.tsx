@@ -3,6 +3,7 @@ import { ArrowLeft, MapPin, Pause, Play } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { BottomNav, PhoneShell } from "@/components/mawaddah/BottomNav";
 import { ProfilePhoto } from "@/components/mawaddah/ProfilePhoto";
+import { useRequireAccount } from "@/lib/session";
 import { getProfile } from "@/lib/profiles";
 
 export const Route = createFileRoute("/profile/$id")({
@@ -68,6 +69,7 @@ function VoiceIntro() {
 
 function ProfileView() {
   const p = Route.useLoaderData();
+  if (!useRequireAccount()) return null;
   return (
     <PhoneShell>
       <div className="flex-1 overflow-y-auto">

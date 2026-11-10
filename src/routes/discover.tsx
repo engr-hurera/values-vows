@@ -3,6 +3,7 @@ import { ChevronRight, SlidersHorizontal } from "lucide-react";
 import { BottomNav, PhoneShell } from "@/components/mawaddah/BottomNav";
 import { FiltersDrawer } from "@/components/mawaddah/FiltersDrawer";
 import { actions, useDiscovery } from "@/lib/discovery-store";
+import { useRequireAccount } from "@/lib/session";
 import { PROFILES, shouldBlur, type Filters } from "@/lib/profiles";
 import { cn } from "@/lib/utils";
 
@@ -29,6 +30,7 @@ const VALUES: { key: NonNullable<Filters["value"]>; pre: string; label: string; 
 function Discover() {
   const { filters } = useDiscovery();
   const navigate = useNavigate();
+  if (!useRequireAccount()) return null;
   return (
     <PhoneShell>
       <header className="flex items-center justify-between px-5 pb-2 pt-6">

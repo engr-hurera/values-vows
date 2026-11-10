@@ -1,7 +1,9 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { LogOut } from "lucide-react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { LogOut, ShieldCheck, ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 import { BottomNav, PhoneShell } from "@/components/mawaddah/BottomNav";
-import { resetOnboarding, useAccount, useRequireAccount, type Account } from "@/lib/session";
+import { resetOnboarding, updateAccount, guardianUpdatesDefault, useAccount, useRequireAccount, type Account } from "@/lib/session";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/settings")({
@@ -39,7 +41,7 @@ function Settings() {
       <main className="flex-1 space-y-6 overflow-y-auto px-6 py-6">
         <div className="flex flex-col items-center gap-3 text-center">
           <div className="h-24 w-24 overflow-hidden rounded-full bg-secondary ring-4 ring-accent-light">
-            {a.photo && <img src={a.photo} alt="My photo" className={cn("h-full w-full object-cover", a.privacyBlur && "blur-md")} />}
+            {a.photo && <img src={a.photo} alt="My photo" className={cn("h-full w-full object-cover", a.gender === "woman" && a.privacyBlur && "blur-md")} />}
           </div>
           <div>
             <h1 className="text-xl font-extrabold">{a.firstName}</h1>
@@ -53,12 +55,19 @@ function Settings() {
             </div>
           ))}
         </dl>
-        <button
+        <section className="space-y-3">
+          <h2 className="text-sm font-bold">Guardian WhatsApp</h2>
+          <label className="block text-xs text-muted-foreground">Guardian Name<input value={a.guardianName ?? ""} onChange={e => updateAccount({guardianName: e.target.value})} className="mt-1 w-full rounded-xl border border-border bg-secondary p-3 text-sm text-primary"/></label>
+          <label className="block text-xs text-muted-foreground">WhatsApp Number<input type="tel" value={a.guardianWhatsapp ?? ""} onChange={e => {const v = e.target.value; updateAccount({guardianWhatsapp: v, guardianUpdates: !a.guardianWhatsapp?.trim() || !v.trim() ? guardianUpdatesDefault(v) : a.guardianUpdates});}} className="mt-1 w-full rounded-xl border border-border bg-secondary p-3 text-sm text-primary"/></label>
+          <div className="flex items-center justify-between gap-4"><span className="text-xs font-semibold">Send chat messages &amp; updates to Guardian on WhatsApp</span><Switch aria-label="Send chat messages & updates to Guardian on WhatsApp" checked={!!a.guardianUpdates} disabled={!a.guardianWhatsapp?.trim()} onCheckedChange={v => updateAccount({guardianUpdates: v})}/></div>
+        </section>
+        <Button variant="reference" size="reference" asChild className="w-full justify-between border-y border-border py-4 text-sm font-bold"><Link to="/security"><ShieldCheck className="h-4 w-4"/>Security &amp; Verification<ChevronRight className="h-4 w-4"/></Link></Button>
+        <Button variant="reference" size="reference"
           onClick={() => { resetOnboarding(); navigate({ to: "/", replace: true }); }}
           className="flex w-full items-center justify-center gap-2 rounded-full border border-destructive/30 py-4 text-sm font-bold text-destructive"
         >
           <LogOut className="h-4 w-4" />Log Out / Reset Onboarding
-        </button>
+        </Button>
       </main>
       <BottomNav active="settings" />
     </PhoneShell>

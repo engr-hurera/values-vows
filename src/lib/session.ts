@@ -10,6 +10,11 @@ export interface Account {
   country: string;
   guardianName?: string | undefined;
   guardianWhatsapp?: string | undefined;
+  guardianUpdates?: boolean;
+  photos?: string[];
+  practice?: string[];
+  living?: string;
+  voiceIntro?: string;
   photo?: string | undefined;
   privacyBlur: boolean;
   sect: string;
@@ -20,6 +25,7 @@ export interface Account {
 
 const ACCOUNT_KEY = "mawaddah.account";
 const SESSION_KEY = "mawaddah.signedIn";
+const ONBOARDED_KEY = "mawaddah.onboarded.v2";
 const listeners = new Set<() => void>();
 const emit = () => listeners.forEach((l) => l());
 
@@ -33,23 +39,33 @@ export function getAccount(): Account | null {
   try { return JSON.parse(localStorage.getItem(ACCOUNT_KEY) || "null"); } catch { return null; }
 }
 export function isSignedIn() {
-  return typeof window !== "undefined" && localStorage.getItem(SESSION_KEY) === "1" && !!getAccount();
+  return typeof window !== "undefined" && localStorage.getItem(ONBOARDED_KEY) === "1" && localStorage.getItem(SESSION_KEY) === "1" && !!getAccount();
+}
+export function guardianUpdatesDefault(number: string) { return !!number.trim(); }
+export function updateAccount(patch: Partial<Account>) {
+  const account = getAccount();
+  if (!account) return;
+  localStorage.setItem(ACCOUNT_KEY, JSON.stringify({ ...account, ...patch }));
+  emit();
 }
 export function register(a: Account) {
   localStorage.setItem(ACCOUNT_KEY, JSON.stringify({ ...a, privacyBlur: a.gender === "woman" && a.privacyBlur }));
   localStorage.setItem(SESSION_KEY, "1");
+  localStorage.setItem(ONBOARDED_KEY, "1");
   emit();
 }
 export function signIn(email: string, password: string) {
   const a = getAccount();
   if (!a || a.email.toLowerCase() !== email.trim().toLowerCase() || a.password !== password) return false;
   localStorage.setItem(SESSION_KEY, "1");
+  localStorage.setItem(ONBOARDED_KEY, "1");
   emit();
   return true;
 }
 export function resetOnboarding() {
   localStorage.removeItem(ACCOUNT_KEY);
   localStorage.removeItem(SESSION_KEY);
+  localStorage.removeItem(ONBOARDED_KEY);
   emit();
 }
 

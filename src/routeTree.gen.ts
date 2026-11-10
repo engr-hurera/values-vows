@@ -11,6 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DiscoverRouteImport } from './routes/discover'
+import { Route as FeedRouteImport } from './routes/feed'
+import { Route as OnboardingRouteImport } from './routes/onboarding'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as SigninRouteImport } from './routes/signin'
 import { Route as ProfileIdRouteImport } from './routes/profile.$id'
 
 const IndexRoute = IndexRouteImport.update({
@@ -23,6 +27,26 @@ const DiscoverRoute = DiscoverRouteImport.update({
   path: '/discover',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FeedRoute = FeedRouteImport.update({
+  id: '/feed',
+  path: '/feed',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingRoute = OnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SigninRoute = SigninRouteImport.update({
+  id: '/signin',
+  path: '/signin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfileIdRoute = ProfileIdRouteImport.update({
   id: '/profile/$id',
   path: '/profile/$id',
@@ -32,30 +56,68 @@ const ProfileIdRoute = ProfileIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/discover': typeof DiscoverRoute
+  '/feed': typeof FeedRoute
+  '/onboarding': typeof OnboardingRoute
+  '/settings': typeof SettingsRoute
+  '/signin': typeof SigninRoute
   '/profile/$id': typeof ProfileIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/discover': typeof DiscoverRoute
+  '/feed': typeof FeedRoute
+  '/onboarding': typeof OnboardingRoute
+  '/settings': typeof SettingsRoute
+  '/signin': typeof SigninRoute
   '/profile/$id': typeof ProfileIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/discover': typeof DiscoverRoute
+  '/feed': typeof FeedRoute
+  '/onboarding': typeof OnboardingRoute
+  '/settings': typeof SettingsRoute
+  '/signin': typeof SigninRoute
   '/profile/$id': typeof ProfileIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/discover' | '/profile/$id'
+  fullPaths:
+    | '/'
+    | '/discover'
+    | '/feed'
+    | '/onboarding'
+    | '/settings'
+    | '/signin'
+    | '/profile/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/discover' | '/profile/$id'
-  id: '__root__' | '/' | '/discover' | '/profile/$id'
+  to:
+    | '/'
+    | '/discover'
+    | '/feed'
+    | '/onboarding'
+    | '/settings'
+    | '/signin'
+    | '/profile/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/discover'
+    | '/feed'
+    | '/onboarding'
+    | '/settings'
+    | '/signin'
+    | '/profile/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DiscoverRoute: typeof DiscoverRoute
+  FeedRoute: typeof FeedRoute
+  OnboardingRoute: typeof OnboardingRoute
+  SettingsRoute: typeof SettingsRoute
+  SigninRoute: typeof SigninRoute
   ProfileIdRoute: typeof ProfileIdRoute
 }
 
@@ -75,6 +137,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DiscoverRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/feed': {
+      id: '/feed'
+      path: '/feed'
+      fullPath: '/feed'
+      preLoaderRoute: typeof FeedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signin': {
+      id: '/signin'
+      path: '/signin'
+      fullPath: '/signin'
+      preLoaderRoute: typeof SigninRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile/$id': {
       id: '/profile/$id'
       path: '/profile/$id'
@@ -88,6 +178,10 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DiscoverRoute: DiscoverRoute,
+  FeedRoute: FeedRoute,
+  OnboardingRoute: OnboardingRoute,
+  SettingsRoute: SettingsRoute,
+  SigninRoute: SigninRoute,
   ProfileIdRoute: ProfileIdRoute,
 }
 export const routeTree = rootRouteImport

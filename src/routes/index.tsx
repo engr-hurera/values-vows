@@ -1,95 +1,80 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { Heart, MapPin, RotateCcw, Star, X } from "lucide-react";
-import { useState } from "react";
-import { BottomNav, PhoneShell } from "@/components/mawaddah/BottomNav";
-import { FiltersDrawer } from "@/components/mawaddah/FiltersDrawer";
-import { ProfilePhoto } from "@/components/mawaddah/ProfilePhoto";
-import { actions, useDiscovery } from "@/lib/discovery-store";
-import { applyFilters, badgesFor, PROFILES } from "@/lib/profiles";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { Check } from "lucide-react";
+import { useEffect, useState } from "react";
+import { isSignedIn } from "@/lib/session";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Discover Partners — Mawaddah" },
-      { name: "description", content: "Browse values-aligned Muslim marriage profiles with modesty-first privacy." },
-      { property: "og:title", content: "Discover Partners — Mawaddah" },
-      { property: "og:description", content: "Browse values-aligned Muslim marriage profiles with modesty-first privacy." },
+      { title: "Mawaddah — Where sincere intentions meet tranquility" },
+      { name: "description", content: "A halal matrimonial community for Muslims seeking Nikah with honesty and respect." },
+      { property: "og:title", content: "Mawaddah — Halal Matrimonial Community" },
+      { property: "og:description", content: "A halal matrimonial community for Muslims seeking Nikah with honesty and respect." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: Feed,
+  component: Splash,
 });
 
-function Feed() {
-  const { filters, dismissed, bookmarked } = useDiscovery();
-  const [tab, setTab] = useState<"daily" | "search">("search");
-  const [liked, setLiked] = useState<string | null>(null);
-  const list = applyFilters(PROFILES, filters).filter((p) => !dismissed.includes(p.id));
-  const p = list[0];
+function Splash() {
+  const navigate = useNavigate();
+  const [pledged, setPledged] = useState(false);
+  useEffect(() => { if (isSignedIn()) navigate({ to: "/feed", replace: true }); }, [navigate]);
 
   return (
-    <PhoneShell>
-      <header className="space-y-3 px-5 pb-3 pt-5">
-        <div className="flex items-center justify-between">
+    <div className="min-h-screen bg-canvas sm:py-6">
+      <div className="relative mx-auto flex min-h-screen max-w-md flex-col justify-between overflow-hidden bg-primary px-6 py-8 text-center text-primary-foreground sm:min-h-[calc(100vh-3rem)] sm:rounded-[2.5rem] sm:shadow-card">
+        <div className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full border border-primary-foreground/5" />
+        <div className="pointer-events-none absolute -bottom-20 -left-20 h-60 w-60 rounded-full border border-primary-foreground/10" />
+        <div>
+          <span className="rounded-full bg-primary-foreground/10 px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest">Halal Matrimonial Community</span>
+        </div>
+        <div className="relative z-10 my-auto space-y-6 py-8">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-accent text-3xl font-extrabold text-accent-foreground shadow-float">M</div>
           <div>
-            <p className="font-arabic text-lg leading-none text-accent">مودّة</p>
-            <h1 className="text-lg font-extrabold">Discover Partners</h1>
+            <h1 className="text-3xl font-extrabold tracking-tight">Mawaddah</h1>
+            <p className="mt-1 text-sm text-primary-foreground/70">Where sincere intentions meet tranquility</p>
           </div>
-          <FiltersDrawer />
+          <figure className="space-y-3 rounded-3xl border border-primary-foreground/10 bg-primary-foreground/10 p-5">
+            <p dir="rtl" className="font-arabic text-xl leading-loose text-accent-border">
+              وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً
+            </p>
+            <p className="text-sm italic leading-relaxed text-primary-foreground/90">
+              "And among His signs is that He created for you mates that you may find tranquility in them, and He placed between you love and mercy."
+            </p>
+            <figcaption className="text-[11px] font-bold uppercase tracking-widest text-primary-foreground/60">Surah Ar-Rum • 30:21</figcaption>
+          </figure>
+          <button
+            type="button"
+            role="checkbox"
+            aria-checked={pledged}
+            onClick={() => setPledged(!pledged)}
+            className="flex w-full items-start gap-3 rounded-2xl border border-primary-foreground/10 bg-primary-foreground/5 p-4 text-left"
+          >
+            <span className={cn("mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md border transition", pledged ? "border-accent bg-accent" : "border-primary-foreground/40")}>
+              {pledged && <Check className="h-3.5 w-3.5" />}
+            </span>
+            <span className="text-xs leading-relaxed text-primary-foreground/85">
+              <strong>Sincere Niyyah Pledge:</strong> I join solely for lawful marriage (Nikah), with honesty and respect.
+            </span>
+          </button>
         </div>
-        <div className="flex rounded-full bg-secondary p-1 text-xs font-bold">
-          {(["daily", "search"] as const).map((t) => (
-            <button key={t} onClick={() => setTab(t)} className={cn("flex-1 rounded-full py-2 transition", tab === t ? "bg-card text-foreground shadow-sm" : "text-muted-foreground")}>
-              {t === "daily" ? "Daily Curated (15)" : "Search Partners"}
-            </button>
-          ))}
+        <div className="relative z-10 space-y-3">
+          <button
+            disabled={!pledged}
+            onClick={() => navigate({ to: "/onboarding" })}
+            className="w-full rounded-full bg-accent py-4 text-sm font-bold text-accent-foreground shadow-float transition disabled:opacity-40"
+          >
+            Continue with Bismillah
+          </button>
+          {!pledged && <p className="text-[11px] text-primary-foreground/60">Tick the Niyyah pledge to continue</p>}
+          <Link to="/signin" className="block w-full rounded-full bg-primary-foreground/10 py-3.5 text-sm font-semibold">
+            Sign In to Existing Account
+          </Link>
         </div>
-      </header>
-
-      <main className="relative flex flex-1 flex-col px-5 pb-4">
-        {p ? (
-          <>
-            <Link to="/profile/$id" params={{ id: p.id }} className="relative block min-h-[480px] flex-1 overflow-hidden rounded-[2rem] bg-primary shadow-card">
-              <ProfilePhoto profile={p} />
-              <div className="pointer-events-none absolute inset-0 bg-photo-fade" />
-              <div className="absolute inset-x-4 top-4 flex items-center justify-between text-on-photo">
-                <span className="glass-dark flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-bold"><MapPin className="h-3 w-3" />{p.distanceKm} km away</span>
-                <span className="glass-dark flex h-12 w-12 items-center justify-center rounded-full border border-on-photo/30 text-xs font-extrabold">{p.match}%</span>
-              </div>
-              <div className="pointer-events-none absolute inset-x-4 bottom-10 space-y-2 text-center text-on-photo">
-                <div className="flex flex-wrap justify-center gap-1.5">
-                  {badgesFor(p).map((b) => (
-                    <span key={b} className="rounded-full bg-accent px-2.5 py-1 text-[11px] font-bold text-accent-foreground">{b}</span>
-                  ))}
-                </div>
-                <h2 className="text-2xl font-extrabold">{p.name}, {p.age}</h2>
-                <p className="text-xs font-semibold uppercase tracking-widest opacity-80">{p.city} • {p.profession}</p>
-              </div>
-            </Link>
-            <div className="relative z-10 -mt-8 flex items-center justify-center gap-5">
-              <button aria-label="Pass" onClick={() => actions.dismiss(p.id)} className="flex h-14 w-14 items-center justify-center rounded-full border border-border bg-card text-primary shadow-float transition hover:scale-105">
-                <X className="h-6 w-6" />
-              </button>
-              <button aria-label="Bookmark" aria-pressed={bookmarked.includes(p.id)} onClick={() => actions.bookmark(p.id)} className="flex h-16 w-16 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-float transition hover:scale-105">
-                <Star className={cn("h-6 w-6", bookmarked.includes(p.id) && "fill-current text-accent")} />
-              </button>
-              <button aria-label="Connect" onClick={() => { setLiked(p.name); actions.dismiss(p.id); setTimeout(() => setLiked(null), 1800); }} className="flex h-14 w-14 items-center justify-center rounded-full bg-accent text-accent-foreground shadow-float transition hover:scale-105">
-                <Heart className="h-6 w-6 fill-current" />
-              </button>
-            </div>
-            {liked && <p className="mt-3 text-center text-xs font-bold text-trust">Connection request sent to {liked} 💌</p>}
-          </>
-        ) : (
-          <div className="flex flex-1 flex-col items-center justify-center gap-3 rounded-[2rem] bg-secondary p-8 text-center">
-            <p className="text-sm font-bold">No more profiles match right now</p>
-            <p className="text-xs text-muted-foreground">Try loosening your filters or start over.</p>
-            <button onClick={actions.resetDismissed} className="flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-xs font-bold text-primary-foreground"><RotateCcw className="h-3.5 w-3.5" />Start over</button>
-          </div>
-        )}
-      </main>
-      <BottomNav active="home" />
-    </PhoneShell>
+      </div>
+    </div>
   );
 }

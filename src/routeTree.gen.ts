@@ -12,10 +12,15 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DiscoverRouteImport } from './routes/discover'
 import { Route as FeedRouteImport } from './routes/feed'
+import { Route as MatchesRouteImport } from './routes/matches'
+import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as SecurityRouteImport } from './routes/security'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SigninRouteImport } from './routes/signin'
+import { Route as WelcomeRouteImport } from './routes/welcome'
+import { Route as ChatIdRouteImport } from './routes/chat.$id'
+import { Route as MatchIdRouteImport } from './routes/match.$id'
 import { Route as ProfileIdRouteImport } from './routes/profile.$id'
 
 const IndexRoute = IndexRouteImport.update({
@@ -31,6 +36,16 @@ const DiscoverRoute = DiscoverRouteImport.update({
 const FeedRoute = FeedRouteImport.update({
   id: '/feed',
   path: '/feed',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MatchesRoute = MatchesRouteImport.update({
+  id: '/matches',
+  path: '/matches',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MessagesRoute = MessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OnboardingRoute = OnboardingRouteImport.update({
@@ -53,6 +68,21 @@ const SigninRoute = SigninRouteImport.update({
   path: '/signin',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WelcomeRoute = WelcomeRouteImport.update({
+  id: '/welcome',
+  path: '/welcome',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChatIdRoute = ChatIdRouteImport.update({
+  id: '/chat/$id',
+  path: '/chat/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MatchIdRoute = MatchIdRouteImport.update({
+  id: '/match/$id',
+  path: '/match/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfileIdRoute = ProfileIdRouteImport.update({
   id: '/profile/$id',
   path: '/profile/$id',
@@ -63,20 +93,30 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/discover': typeof DiscoverRoute
   '/feed': typeof FeedRoute
+  '/matches': typeof MatchesRoute
+  '/messages': typeof MessagesRoute
   '/onboarding': typeof OnboardingRoute
   '/security': typeof SecurityRoute
   '/settings': typeof SettingsRoute
   '/signin': typeof SigninRoute
+  '/welcome': typeof WelcomeRoute
+  '/chat/$id': typeof ChatIdRoute
+  '/match/$id': typeof MatchIdRoute
   '/profile/$id': typeof ProfileIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/discover': typeof DiscoverRoute
   '/feed': typeof FeedRoute
+  '/matches': typeof MatchesRoute
+  '/messages': typeof MessagesRoute
   '/onboarding': typeof OnboardingRoute
   '/security': typeof SecurityRoute
   '/settings': typeof SettingsRoute
   '/signin': typeof SigninRoute
+  '/welcome': typeof WelcomeRoute
+  '/chat/$id': typeof ChatIdRoute
+  '/match/$id': typeof MatchIdRoute
   '/profile/$id': typeof ProfileIdRoute
 }
 export interface FileRoutesById {
@@ -84,10 +124,15 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/discover': typeof DiscoverRoute
   '/feed': typeof FeedRoute
+  '/matches': typeof MatchesRoute
+  '/messages': typeof MessagesRoute
   '/onboarding': typeof OnboardingRoute
   '/security': typeof SecurityRoute
   '/settings': typeof SettingsRoute
   '/signin': typeof SigninRoute
+  '/welcome': typeof WelcomeRoute
+  '/chat/$id': typeof ChatIdRoute
+  '/match/$id': typeof MatchIdRoute
   '/profile/$id': typeof ProfileIdRoute
 }
 export interface FileRouteTypes {
@@ -96,30 +141,45 @@ export interface FileRouteTypes {
     | '/'
     | '/discover'
     | '/feed'
+    | '/matches'
+    | '/messages'
     | '/onboarding'
     | '/security'
     | '/settings'
     | '/signin'
+    | '/welcome'
+    | '/chat/$id'
+    | '/match/$id'
     | '/profile/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/discover'
     | '/feed'
+    | '/matches'
+    | '/messages'
     | '/onboarding'
     | '/security'
     | '/settings'
     | '/signin'
+    | '/welcome'
+    | '/chat/$id'
+    | '/match/$id'
     | '/profile/$id'
   id:
     | '__root__'
     | '/'
     | '/discover'
     | '/feed'
+    | '/matches'
+    | '/messages'
     | '/onboarding'
     | '/security'
     | '/settings'
     | '/signin'
+    | '/welcome'
+    | '/chat/$id'
+    | '/match/$id'
     | '/profile/$id'
   fileRoutesById: FileRoutesById
 }
@@ -127,10 +187,15 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DiscoverRoute: typeof DiscoverRoute
   FeedRoute: typeof FeedRoute
+  MatchesRoute: typeof MatchesRoute
+  MessagesRoute: typeof MessagesRoute
   OnboardingRoute: typeof OnboardingRoute
   SecurityRoute: typeof SecurityRoute
   SettingsRoute: typeof SettingsRoute
   SigninRoute: typeof SigninRoute
+  WelcomeRoute: typeof WelcomeRoute
+  ChatIdRoute: typeof ChatIdRoute
+  MatchIdRoute: typeof MatchIdRoute
   ProfileIdRoute: typeof ProfileIdRoute
 }
 
@@ -155,6 +220,20 @@ declare module '@tanstack/react-router' {
       path: '/feed'
       fullPath: '/feed'
       preLoaderRoute: typeof FeedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/matches': {
+      id: '/matches'
+      path: '/matches'
+      fullPath: '/matches'
+      preLoaderRoute: typeof MatchesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/messages': {
+      id: '/messages'
+      path: '/messages'
+      fullPath: '/messages'
+      preLoaderRoute: typeof MessagesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/onboarding': {
@@ -185,6 +264,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SigninRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/welcome': {
+      id: '/welcome'
+      path: '/welcome'
+      fullPath: '/welcome'
+      preLoaderRoute: typeof WelcomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/chat/$id': {
+      id: '/chat/$id'
+      path: '/chat/$id'
+      fullPath: '/chat/$id'
+      preLoaderRoute: typeof ChatIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/match/$id': {
+      id: '/match/$id'
+      path: '/match/$id'
+      fullPath: '/match/$id'
+      preLoaderRoute: typeof MatchIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile/$id': {
       id: '/profile/$id'
       path: '/profile/$id'
@@ -199,10 +299,15 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DiscoverRoute: DiscoverRoute,
   FeedRoute: FeedRoute,
+  MatchesRoute: MatchesRoute,
+  MessagesRoute: MessagesRoute,
   OnboardingRoute: OnboardingRoute,
   SecurityRoute: SecurityRoute,
   SettingsRoute: SettingsRoute,
   SigninRoute: SigninRoute,
+  WelcomeRoute: WelcomeRoute,
+  ChatIdRoute: ChatIdRoute,
+  MatchIdRoute: MatchIdRoute,
   ProfileIdRoute: ProfileIdRoute,
 }
 export const routeTree = rootRouteImport

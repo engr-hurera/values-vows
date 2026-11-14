@@ -14,13 +14,9 @@ describe("Woman-Only Blur Rule", () => {
 });
 
 describe("Filters", () => {
-  it("Willing to Relocate keeps only relocating profiles", () => {
-    const r = applyFilters(PROFILES, { ...EMPTY_FILTERS, willingToRelocate: true });
+  it("Wali-supervised filter keeps only matching profiles", () => {
+    const r = applyFilters(PROFILES, { ...EMPTY_FILTERS, waliOnly: true });
     expect(r.length).toBeGreaterThan(0);
-    expect(r.every((p) => p.willingToRelocate)).toBe(true);
-  });
-  it("language filter matches any selected language", () => {
-    const r = applyFilters(PROFILES, { ...EMPTY_FILTERS, languages: ["Yoruba"] });
-    expect(r.map((p) => p.id)).toEqual(["yusuf"]);
+    expect(r.every((p) => p.waliLinked)).toBe(true);
   });
 });

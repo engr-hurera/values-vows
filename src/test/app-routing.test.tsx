@@ -14,4 +14,10 @@ describe("App routing", () => {
 
     expect(matches.at(-1)?.routeId).not.toBe(rootRouteId);
   });
+
+  it("has the radar welcome and sign-in pages for new and returning users", () => {
+    const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
+    expect(router.matchRoutes("/welcome").at(-1)?.routeId).toBe("/welcome");
+    expect(router.matchRoutes("/signin").at(-1)?.routeId).toBe("/signin");
+  });
 });

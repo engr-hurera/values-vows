@@ -1,0 +1,89 @@
+{
+  "source": "code-archive: values-vows-main.zip (Lovable TanStack Start project, same template revision)",
+  "capabilities": [
+    {
+      "capability": "code",
+      "source": "src/ routes, components, lib, styles, tests",
+      "outcome": "copy verbatim",
+      "status": "verified",
+      "next_action": "none"
+    },
+    {
+      "capability": "schema",
+      "source": "none: no database or server code in source",
+      "outcome": "not applicable",
+      "status": "verified",
+      "next_action": "none"
+    },
+    {
+      "capability": "records",
+      "source": "profiles are hardcoded sample data in src/lib/profiles.ts",
+      "outcome": "preserved in code",
+      "status": "verified",
+      "next_action": "none"
+    },
+    {
+      "capability": "auth identities",
+      "source": "browser-only demo account in localStorage (mawaddah.account), no server-side users",
+      "outcome": "preserve existing demo behaviour; no users exist to import",
+      "status": "verified",
+      "next_action": "optional follow-up: move sign-up/sign-in and profiles to Lovable Cloud if user wants real accounts"
+    },
+    {
+      "capability": "authorization",
+      "source": "client-side route guard useRequireAccount",
+      "outcome": "preserve",
+      "status": "verified",
+      "next_action": "none"
+    },
+    {
+      "capability": "uploaded file bytes",
+      "source": "photos stored as data in localStorage; external Unsplash sample images",
+      "outcome": "preserve",
+      "status": "verified",
+      "next_action": "none"
+    },
+    {
+      "capability": "external providers",
+      "source": "Google Fonts (Amiri, Plus Jakarta Sans), Unsplash images",
+      "outcome": "preserve",
+      "status": "verified",
+      "next_action": "none"
+    },
+    {
+      "capability": "public endpoints / callbacks / webhooks / schedules",
+      "source": "none detected",
+      "outcome": "not applicable",
+      "status": "verified",
+      "next_action": "none"
+    },
+    {
+      "capability": "secrets",
+      "source": "none referenced",
+      "outcome": "not applicable",
+      "status": "verified",
+      "next_action": "none"
+    },
+    {
+      "capability": "cutover",
+      "source": "not published from this project",
+      "outcome": "publish when ready",
+      "status": "accepted",
+      "next_action": "user publishes"
+    },
+    {
+      "capability": "verification",
+      "source": "build, tests, routes",
+      "outcome": "run",
+      "status": "verified",
+      "next_action": "none"
+    },
+    {
+      "capability": "source bug fix",
+      "source": "pledge checkbox stretched by .reference-phone input rule",
+      "outcome": "rule now excludes checkbox/radio",
+      "status": "verified",
+      "next_action": "none"
+    }
+  ]
+}

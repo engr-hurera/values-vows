@@ -27,14 +27,15 @@ function Settings() {
   if (!ready || !raw) return null;
   const a: Account = JSON.parse(raw);
   const rows: [string, string][] = [
-    ["Location", `${a.city}, ${a.country}`],
+    ["Location", [a.city, a.country].filter(Boolean).join(", ")],
     ["Date of Birth", a.dob],
     ["Sect", a.sect],
     ["Marriage Timeline", a.timeline],
     ["Guardian", a.guardianName ? `${a.guardianName} · ${a.guardianWhatsapp ?? ""}` : "Not added"],
-    ["Email", a.email],
+    a.phone ? ["Phone", a.phone] : ["Email", a.email],
   ];
   if (a.gender === "woman") rows.push(["Modesty Blur", a.privacyBlur ? "On" : "Off"]);
+  rows.push(["Anti-Screenshot Watermark", a.antiScreenshot === false ? "Off" : "On"]);
 
   return (
     <PhoneShell>

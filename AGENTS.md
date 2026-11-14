@@ -29,6 +29,8 @@ use the editor.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
 
-- Reference onboarding uses the uploaded showcase's 276px phone frame, status bar, and screen geometry with semantic tokens, because fidelity is required rather than a redesigned layout.
+- Entry, sign-in and all four onboarding steps share ReferenceShell (authored on the showcase's 276px grid, CSS-zoomed to a fixed 375x812 phone) and app screens use PhoneShell at the same 375x812, so no screen stretches wider.
+- Sign-up credentials are collected once on the radar screen and carried in session storage into onboarding; onboarding redirects to the radar without them, so the last step never re-asks.
 - Onboarding completion uses a versioned flag set only by registration or explicit sign-in; the index always renders splash, so stale demo sessions cannot bypass entry.
 - Liveness verification is a separate protected Settings destination and never assigns a badge without an actual provider result, because a visual prototype is not identity verification.
+- Matches, proposals, chats and safety reports live in one device-local store with pure rule functions (cap, freeze, mutual match) kept separate from the hook, so rules are unit-testable and can move to a backend later.

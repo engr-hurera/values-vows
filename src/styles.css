@@ -70,6 +70,9 @@
   --color-canvas: var(--canvas);
   --color-overlay: var(--overlay);
   --color-on-photo: var(--on-photo);
+  --color-google: var(--google);
+  --color-google-foreground: var(--google-foreground);
+  --color-google-border: var(--google-border);
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --font-arabic: "Amiri", serif;
   --shadow-card: var(--shadow-card);
@@ -86,29 +89,33 @@
 
 :root {
   --radius: 1rem;
-  /* Espresso Roast & Desert Linen */
-  --background: #FAF7F3;
-  --foreground: #261E1C;
+  /* Locked reference palette: warm linen, obsidian charcoal, terracotta */
+  --background: #FAF8F5;
+  --foreground: #1C1917;
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.225 0.012 30);
+  --card-foreground: #1C1917;
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.225 0.012 30);
-  --primary: #261E1C;
-  --primary-soft: #382D2A;
+  --popover-foreground: #1C1917;
+  --primary: #1C1917;
+  --primary-soft: #292524;
   --primary-foreground: oklch(0.985 0.005 70);
   --secondary: #F3EDE6;
   --secondary-foreground: oklch(0.225 0.012 30);
   --muted: oklch(0.95 0.011 70);
   --muted-foreground: #7A6E6A;
-  --accent: #B86245;
+  --accent: #C86D51;
   --accent-foreground: oklch(0.99 0 0);
-  --accent-light: #F9EEEA;
-  --accent-border: #EBD2C8;
+  --accent-light: #FBF0EB;
+  --accent-border: #EFD5CA;
   --trust: #43614D;
   --trust-light: #EBF2ED;
   --canvas: #EAE3DC;
   --overlay: oklch(0.15 0.01 30);
   --on-photo: oklch(0.99 0 0);
+  /* Google sign-in button, light theme per Google branding guidelines */
+  --google: #FFFFFF;
+  --google-foreground: #1F1F1F;
+  --google-border: #747775;
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.984 0.003 247.858);
   --border: #E4DDD5;
@@ -134,16 +141,26 @@
 
 /* Source showcase frame and status bar; colors retain its exact espresso values. */
 .reference-stage { min-height: 100svh; display: flex; align-items: center; justify-content: center; background: var(--canvas); padding: 24px 12px; }
-.reference-phone { width: 276px; min-height: 576px; border-radius: 40px; position: relative; overflow: hidden; display: flex; flex-direction: column; flex-shrink: 0; box-shadow: var(--shadow-card); }
+.reference-phone { width: 276px; zoom: 1.3587; min-height: 598px; border-radius: 40px; position: relative; overflow: hidden; display: flex; flex-direction: column; flex-shrink: 0; box-shadow: var(--shadow-card); }
 .ios-statusbar { height: 28px; padding: 6px 18px 0; display: flex; align-items: center; justify-content: space-between; font-size: 9px; font-weight: 700; flex-shrink: 0; z-index: 20; }
-.reference-phone input:not([type=file]) { min-width: 0; width: 100%; background: transparent; outline: none; }
+.reference-phone input:not([type=file]):not([type=checkbox]):not([type=radio]) { min-width: 0; width: 100%; background: transparent; outline: none; }
 .reference-phone button { letter-spacing: 0; }
 .reference-phone button svg { width: revert-layer; height: revert-layer; }
 .reference-toggle { width: 30px; height: 17px; padding: 2px; }
-.reference-toggle > span { width: 13px; height: 13px; }
-.reference-toggle[data-state=checked] > span { transform: translateX(13px); }
+.reference-toggle > span { width: 13px; height: 13px; translate: none; }
+.reference-toggle[data-state=checked] { background: var(--accent); }
+.reference-toggle[data-state=checked] > span { transform: translateX(9px); }
 .reference-toggle[data-state=unchecked] > span { transform: translateX(0); }
-@media (max-width: 320px) { .reference-stage { padding: 0; } .reference-phone { width: 100%; min-height: 100svh; border-radius: 0; } }
+/* Same switch at app scale (30x17 on the 276px grid x 1.3587). */
+.filter-toggle { width: 41px; height: 23px; padding: 3px; }
+.filter-toggle > span { width: 17px; height: 17px; translate: none; }
+.filter-toggle[data-state=checked] { background: var(--accent); }
+.filter-toggle[data-state=checked] > span { transform: translateX(18px); }
+.filter-toggle[data-state=unchecked] > span { transform: translateX(0); }
+/* Screens are authored on the 276px reference grid and scaled to a fixed 375 x 812px phone (375 / 276 = 1.3587; 598 x 1.3587 = 812). */
+@media (max-width: 420px) { .reference-stage { padding: 0; align-items: flex-start; } .reference-phone { border-radius: 0; box-shadow: none; } }
+@media (max-width: 374px) { .reference-phone { zoom: 1.3; } }
+@media (max-width: 358px) { .reference-phone { zoom: 1.159; } }
 
 @layer base {
   * {

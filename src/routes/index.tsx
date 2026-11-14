@@ -39,7 +39,7 @@ function Splash() {
         </label>
       </div>
       <div className="space-y-2 relative z-10">
-        <Button variant="reference" size="reference" disabled={!pledged} onClick={() => navigate({to: "/onboarding"})} className="w-full py-2.5 rounded-full bg-accent text-primary-foreground font-bold text-[10px] shadow-sm">Continue with Bismillah</Button>
+        <Button variant="reference" size="reference" disabled={!pledged} onClick={() => navigate({to: "/welcome"})} className="w-full py-2.5 rounded-full bg-accent text-primary-foreground font-bold text-[10px] shadow-sm">Continue with Bismillah</Button>
         <Button variant="reference" size="reference" asChild className="w-full py-2 rounded-full bg-primary-foreground/10 text-primary-foreground font-semibold text-[9px]"><Link to="/signin">Sign In to Existing Account</Link></Button>
       </div>
     </div>

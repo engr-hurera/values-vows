@@ -1,12 +1,12 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Heart, MapPin, RotateCcw, Star, X } from "lucide-react";
 import { useState } from "react";
 import { BottomNav, PhoneShell } from "@/components/mawaddah/BottomNav";
-import { useRequireAccount } from "@/lib/session";
 import { FiltersDrawer } from "@/components/mawaddah/FiltersDrawer";
 import { ProfilePhoto } from "@/components/mawaddah/ProfilePhoto";
+import { candidatesFor, chats, useChatSession } from "@/lib/chat-store";
 import { actions, useDiscovery } from "@/lib/discovery-store";
-import { applyFilters, badgesFor, PROFILES } from "@/lib/profiles";
+import { applyFilters, badgesFor } from "@/lib/profiles";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/feed")({
@@ -24,13 +24,21 @@ export const Route = createFileRoute("/feed")({
 });
 
 function Feed() {
-  const ready = useRequireAccount();
+  const session = useChatSession();
+  const navigate = useNavigate();
   const { filters, dismissed, bookmarked } = useDiscovery();
   const [tab, setTab] = useState<"daily" | "search">("search");
   const [liked, setLiked] = useState<string | null>(null);
-  const list = applyFilters(PROFILES, filters).filter((p) => !dismissed.includes(p.id));
+  if (!session) return null;
+  const { account, state } = session;
+  const list = applyFilters(candidatesFor(account.gender), filters).filter((x) => !dismissed.includes(x.id) && !state.matches.includes(x.id));
   const p = list[0];
-  if (!ready) return null;
+  const connect = (id: string, name: string) => {
+    actions.dismiss(id);
+    if (chats.connect(id)) { navigate({ to: "/match/$id", params: { id } }); return; }
+    setLiked(name);
+    setTimeout(() => setLiked(null), 1800);
+  };
 
   return (
     <PhoneShell>
@@ -78,7 +86,7 @@ function Feed() {
               <button aria-label="Bookmark" aria-pressed={bookmarked.includes(p.id)} onClick={() => actions.bookmark(p.id)} className="flex h-16 w-16 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-float transition hover:scale-105">
                 <Star className={cn("h-6 w-6", bookmarked.includes(p.id) && "fill-current text-accent")} />
               </button>
-              <button aria-label="Connect" onClick={() => { setLiked(p.name); actions.dismiss(p.id); setTimeout(() => setLiked(null), 1800); }} className="flex h-14 w-14 items-center justify-center rounded-full bg-accent text-accent-foreground shadow-float transition hover:scale-105">
+              <button aria-label="Connect" onClick={() => connect(p.id, p.name)} className="flex h-14 w-14 items-center justify-center rounded-full bg-accent text-accent-foreground shadow-float transition hover:scale-105">
                 <Heart className="h-6 w-6 fill-current" />
               </button>
             </div>

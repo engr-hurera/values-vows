@@ -6,7 +6,7 @@ import { PhotoCropModal } from "@/components/mawaddah/PhotoCropModal";
 import { RefField as Field, ReferenceShell } from "@/components/mawaddah/ReferenceShell";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { canAdvance, formatDob, MIN_AGE, ageFrom } from "@/lib/onboarding";
+import { canAdvance, MIN_AGE, ageFrom } from "@/lib/onboarding";
 import { splitCountry, type PickerType } from "@/lib/picker-options";
 import { clearPendingAuth, defaultBlurFor, getPendingAuth, guardianUpdatesDefault, register, type Gender, type PendingAuth } from "@/lib/session";
 import { cn } from "@/lib/utils";
@@ -155,11 +155,10 @@ function Onboarding() {
                 <span className="text-muted-foreground font-medium shrink-0">Full name</span>
                 <input type="text" value={fullName} onChange={e => setFullName(e.target.value)} autoComplete="name" placeholder="e.g. Amina Bello" className="text-right font-bold text-primary placeholder:font-semibold placeholder:text-muted-foreground"/>
               </label>
-              <label className="relative px-3 py-2 flex items-center justify-between gap-2 bg-card cursor-pointer">
+              <div className="px-3 py-2 flex items-center justify-between gap-2 bg-card">
                 <span className="text-muted-foreground font-medium shrink-0">Date of birth</span>
-                <span className={cn("font-bold", dob ? "text-primary" : "font-semibold text-muted-foreground")}>{dob ? formatDob(dob) : "Select"}</span>
-                <input type="date" aria-label="Date of birth" value={dob} max={new Date().toISOString().slice(0, 10)} onChange={e => setDob(e.target.value)} onClick={e => { try { e.currentTarget.showPicker(); } catch { /* older browsers open on focus */ } }} className="absolute inset-0 opacity-0 cursor-pointer"/>
-              </label>
+                <DobInput value={dob} onChange={setDob}/>
+              </div>
               <PickRow tight label="Height" value={height} onClick={() => openPicker("height", "Select Height", height, setHeight)}/>
               <PickRow tight label="Marital status" value={marital} onClick={() => openPicker("marital", "Marital Status", marital, setMarital)}/>
             </div>
@@ -174,7 +173,7 @@ function Onboarding() {
               <PickRow accent label="Current country" value={currentCountry} onClick={() => openPicker("country", "Current Country", currentCountry, setCurrentCountry)}/>
               <PickRow accent label="Born country" value={bornCountry} onClick={() => openPicker("country", "Born Country", bornCountry, setBornCountry)}/>
               <PickRow accent label="Ethnicity" value={ethnicity} onClick={() => openPicker("ethnicity", "Select Ethnicity", ethnicity, setEthnicity)}/>
-              <PickRow accent label="Languages" value={languages} onClick={() => openPicker("language", "Languages Spoken", languages, setLanguages)}/>
+              <PickRow accent label="Languages" value={languages} onClick={() => setPicker({ type: "language", title: "Languages Spoken", value: languages, multi: true, onSelect: setLanguages })}/>
             </div>
           </div>
         </>}
@@ -247,4 +246,27 @@ function Onboarding() {
     <CustomPicker request={picker} onClose={() => setPicker(null)}/>
     <PhotoCropModal src={crop?.src ?? null} onCancel={() => setCrop(null)} onApply={savePhoto}/>
   </ReferenceShell>;
+}
+
+/** Type DD / MM / YYYY; focus jumps to the next box automatically. */
+function DobInput({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const [y0 = "", m0 = "", d0 = ""] = value ? value.split("-") : [];
+  const [d, setD] = useState(d0); const [m, setM] = useState(m0); const [y, setY] = useState(y0);
+  const mRef = useRef<HTMLInputElement>(null); const yRef = useRef<HTMLInputElement>(null);
+  const sync = (dd: string, mm: string, yy: string) => {
+    const ok = yy.length === 4 && +mm >= 1 && +mm <= 12 && +dd >= 1 && +dd <= new Date(+yy, +mm, 0).getDate();
+    onChange(ok ? `${yy}-${mm.padStart(2, "0")}-${dd.padStart(2, "0")}` : "");
+  };
+  const box = "w-[18px] text-center font-bold text-primary placeholder:font-semibold placeholder:text-muted-foreground bg-secondary rounded";
+  const num = (v: string, n: number) => v.replace(/\D/g, "").slice(0, n);
+  return (
+    <div className="flex items-center gap-0.5">
+      <input inputMode="numeric" aria-label="Day of birth" placeholder="DD" value={d} className={box} onChange={e => { const v = num(e.target.value, 2); setD(v); sync(v, m, y); if (v.length === 2) mRef.current?.focus(); }}/>
+      <span className="text-muted-foreground">/</span>
+      <input ref={mRef} inputMode="numeric" aria-label="Month of birth" placeholder="MM" value={m} className={box} onChange={e => { const v = num(e.target.value, 2); setM(v); sync(d, v, y); if (v.length === 2) yRef.current?.focus(); }}/>
+      <span className="text-muted-foreground">/</span>
+      <input ref={yRef} inputMode="numeric" aria-label="Year of birth" placeholder="YYYY" value={y} className={cn(box, "w-[28px]")} onChange={e => { const v = num(e.target.value, 4); setY(v); sync(d, m, v); }}/>
+      {value && <span className="ml-1 text-[7px] font-bold text-accent">({ageFrom(value)})</span>}
+    </div>
+  );
 }

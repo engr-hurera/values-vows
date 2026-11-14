@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ANY, ANY_OPTION, PICKER_DATASETS, filterOptions, lettersFor, usesAlphabet, type PickerType } from "@/lib/picker-options";
 import { cn } from "@/lib/utils";
 
-export interface PickerRequest { type: PickerType; title: string; value: string; allowAny?: boolean; onSelect: (label: string) => void }
+export interface PickerRequest { type: PickerType; title: string; value: string; allowAny?: boolean; multi?: boolean; onSelect: (label: string) => void }
 
 /**
  * Showcase "Custom Dropdown Picker": search + A–Z letter pills + radio rows + Cancel / Done.
@@ -26,8 +26,14 @@ export function CustomPicker({ request, onClose }: { request: PickerRequest | nu
   const showAlpha = usesAlphabet(base.length);
   const options = filterOptions(items, query, showAlpha ? letter : "ALL");
 
+  const multi = !!request?.multi;
+  const chosen = picked.split(",").map((v) => v.trim()).filter(Boolean);
+  const toggle = (label: string) => {
+    if (!multi) return setPicked(label);
+    setPicked((chosen.includes(label) ? chosen.filter((c) => c !== label) : [...chosen, label]).join(", "));
+  };
   const done = () => {
-    if (request && picked) request.onSelect(picked === ANY ? "" : picked);
+    if (request && (picked || multi)) request.onSelect(picked === ANY ? "" : picked);
     onClose();
   };
 
@@ -77,14 +83,15 @@ export function CustomPicker({ request, onClose }: { request: PickerRequest | nu
             </div>
           )}
 
-          <div role="radiogroup" aria-label={request?.title} className="max-h-60 divide-y divide-border overflow-y-auto rounded-2xl border border-border bg-card">
+          {multi && <p className="text-[10px] font-semibold text-muted-foreground">Tick every language you speak{chosen.length ? ` · ${chosen.length} selected` : ""}</p>}
+          <div role={multi ? "group" : "radiogroup"} aria-label={request?.title} className="max-h-60 divide-y divide-border overflow-y-auto rounded-2xl border border-border bg-card">
             {options.map((item) => {
-              const on = item.label === picked;
+              const on = multi ? chosen.includes(item.label) : item.label === picked;
               return (
-                <button key={item.label} type="button" role="radio" aria-checked={on} onClick={() => setPicked(item.label)} className={cn("flex w-full items-center justify-between px-3.5 py-2.5 text-left transition hover:bg-secondary/60", on && "bg-accent-light/60")}>
+                <button key={item.label} type="button" role={multi ? "checkbox" : "radio"} aria-checked={on} onClick={() => toggle(item.label)} className={cn("flex w-full items-center justify-between px-3.5 py-2.5 text-left transition hover:bg-secondary/60", on && "bg-accent-light/60")}>
                   <div>
                     <span className="block text-xs font-bold text-primary">{item.label}</span>
-                    <span className="block text-[10px] text-muted-foreground">{item.sub}</span>
+                    {item.sub && <span className="block text-[10px] text-muted-foreground">{item.sub}</span>}
                   </div>
                   {on
                     ? <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-accent-foreground">✓</span>

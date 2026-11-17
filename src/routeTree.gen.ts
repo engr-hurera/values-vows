@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DiscoverRouteImport } from './routes/discover'
 import { Route as FeedRouteImport } from './routes/feed'
+import { Route as GoldRouteImport } from './routes/gold'
 import { Route as MatchesRouteImport } from './routes/matches'
 import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
@@ -22,6 +23,12 @@ import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as ChatIdRouteImport } from './routes/chat.$id'
 import { Route as MatchIdRouteImport } from './routes/match.$id'
 import { Route as ProfileIdRouteImport } from './routes/profile.$id'
+import { Route as SettingsBillingRouteImport } from './routes/settings_.billing'
+import { Route as SettingsMenuRouteImport } from './routes/settings_.menu'
+import { Route as SettingsPrivacyRouteImport } from './routes/settings_.privacy'
+import { Route as SettingsSalahRouteImport } from './routes/settings_.salah'
+import { Route as SettingsSecurityRouteImport } from './routes/settings_.security'
+import { Route as SettingsWaliRouteImport } from './routes/settings_.wali'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -36,6 +43,11 @@ const DiscoverRoute = DiscoverRouteImport.update({
 const FeedRoute = FeedRouteImport.update({
   id: '/feed',
   path: '/feed',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GoldRoute = GoldRouteImport.update({
+  id: '/gold',
+  path: '/gold',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MatchesRoute = MatchesRouteImport.update({
@@ -88,11 +100,42 @@ const ProfileIdRoute = ProfileIdRouteImport.update({
   path: '/profile/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SettingsBillingRoute = SettingsBillingRouteImport.update({
+  id: '/settings_/billing',
+  path: '/settings/billing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsMenuRoute = SettingsMenuRouteImport.update({
+  id: '/settings_/menu',
+  path: '/settings/menu',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsPrivacyRoute = SettingsPrivacyRouteImport.update({
+  id: '/settings_/privacy',
+  path: '/settings/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsSalahRoute = SettingsSalahRouteImport.update({
+  id: '/settings_/salah',
+  path: '/settings/salah',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsSecurityRoute = SettingsSecurityRouteImport.update({
+  id: '/settings_/security',
+  path: '/settings/security',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsWaliRoute = SettingsWaliRouteImport.update({
+  id: '/settings_/wali',
+  path: '/settings/wali',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/discover': typeof DiscoverRoute
   '/feed': typeof FeedRoute
+  '/gold': typeof GoldRoute
   '/matches': typeof MatchesRoute
   '/messages': typeof MessagesRoute
   '/onboarding': typeof OnboardingRoute
@@ -103,11 +146,18 @@ export interface FileRoutesByFullPath {
   '/chat/$id': typeof ChatIdRoute
   '/match/$id': typeof MatchIdRoute
   '/profile/$id': typeof ProfileIdRoute
+  '/settings/billing': typeof SettingsBillingRoute
+  '/settings/menu': typeof SettingsMenuRoute
+  '/settings/privacy': typeof SettingsPrivacyRoute
+  '/settings/salah': typeof SettingsSalahRoute
+  '/settings/security': typeof SettingsSecurityRoute
+  '/settings/wali': typeof SettingsWaliRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/discover': typeof DiscoverRoute
   '/feed': typeof FeedRoute
+  '/gold': typeof GoldRoute
   '/matches': typeof MatchesRoute
   '/messages': typeof MessagesRoute
   '/onboarding': typeof OnboardingRoute
@@ -118,12 +168,19 @@ export interface FileRoutesByTo {
   '/chat/$id': typeof ChatIdRoute
   '/match/$id': typeof MatchIdRoute
   '/profile/$id': typeof ProfileIdRoute
+  '/settings/billing': typeof SettingsBillingRoute
+  '/settings/menu': typeof SettingsMenuRoute
+  '/settings/privacy': typeof SettingsPrivacyRoute
+  '/settings/salah': typeof SettingsSalahRoute
+  '/settings/security': typeof SettingsSecurityRoute
+  '/settings/wali': typeof SettingsWaliRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/discover': typeof DiscoverRoute
   '/feed': typeof FeedRoute
+  '/gold': typeof GoldRoute
   '/matches': typeof MatchesRoute
   '/messages': typeof MessagesRoute
   '/onboarding': typeof OnboardingRoute
@@ -134,6 +191,12 @@ export interface FileRoutesById {
   '/chat/$id': typeof ChatIdRoute
   '/match/$id': typeof MatchIdRoute
   '/profile/$id': typeof ProfileIdRoute
+  '/settings_/billing': typeof SettingsBillingRoute
+  '/settings_/menu': typeof SettingsMenuRoute
+  '/settings_/privacy': typeof SettingsPrivacyRoute
+  '/settings_/salah': typeof SettingsSalahRoute
+  '/settings_/security': typeof SettingsSecurityRoute
+  '/settings_/wali': typeof SettingsWaliRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -141,6 +204,7 @@ export interface FileRouteTypes {
     | '/'
     | '/discover'
     | '/feed'
+    | '/gold'
     | '/matches'
     | '/messages'
     | '/onboarding'
@@ -151,11 +215,18 @@ export interface FileRouteTypes {
     | '/chat/$id'
     | '/match/$id'
     | '/profile/$id'
+    | '/settings/billing'
+    | '/settings/menu'
+    | '/settings/privacy'
+    | '/settings/salah'
+    | '/settings/security'
+    | '/settings/wali'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/discover'
     | '/feed'
+    | '/gold'
     | '/matches'
     | '/messages'
     | '/onboarding'
@@ -166,11 +237,18 @@ export interface FileRouteTypes {
     | '/chat/$id'
     | '/match/$id'
     | '/profile/$id'
+    | '/settings/billing'
+    | '/settings/menu'
+    | '/settings/privacy'
+    | '/settings/salah'
+    | '/settings/security'
+    | '/settings/wali'
   id:
     | '__root__'
     | '/'
     | '/discover'
     | '/feed'
+    | '/gold'
     | '/matches'
     | '/messages'
     | '/onboarding'
@@ -181,12 +259,19 @@ export interface FileRouteTypes {
     | '/chat/$id'
     | '/match/$id'
     | '/profile/$id'
+    | '/settings_/billing'
+    | '/settings_/menu'
+    | '/settings_/privacy'
+    | '/settings_/salah'
+    | '/settings_/security'
+    | '/settings_/wali'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DiscoverRoute: typeof DiscoverRoute
   FeedRoute: typeof FeedRoute
+  GoldRoute: typeof GoldRoute
   MatchesRoute: typeof MatchesRoute
   MessagesRoute: typeof MessagesRoute
   OnboardingRoute: typeof OnboardingRoute
@@ -197,6 +282,12 @@ export interface RootRouteChildren {
   ChatIdRoute: typeof ChatIdRoute
   MatchIdRoute: typeof MatchIdRoute
   ProfileIdRoute: typeof ProfileIdRoute
+  SettingsBillingRoute: typeof SettingsBillingRoute
+  SettingsMenuRoute: typeof SettingsMenuRoute
+  SettingsPrivacyRoute: typeof SettingsPrivacyRoute
+  SettingsSalahRoute: typeof SettingsSalahRoute
+  SettingsSecurityRoute: typeof SettingsSecurityRoute
+  SettingsWaliRoute: typeof SettingsWaliRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -220,6 +311,13 @@ declare module '@tanstack/react-router' {
       path: '/feed'
       fullPath: '/feed'
       preLoaderRoute: typeof FeedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gold': {
+      id: '/gold'
+      path: '/gold'
+      fullPath: '/gold'
+      preLoaderRoute: typeof GoldRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/matches': {
@@ -292,6 +390,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/settings_/billing': {
+      id: '/settings_/billing'
+      path: '/settings/billing'
+      fullPath: '/settings/billing'
+      preLoaderRoute: typeof SettingsBillingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings_/menu': {
+      id: '/settings_/menu'
+      path: '/settings/menu'
+      fullPath: '/settings/menu'
+      preLoaderRoute: typeof SettingsMenuRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings_/privacy': {
+      id: '/settings_/privacy'
+      path: '/settings/privacy'
+      fullPath: '/settings/privacy'
+      preLoaderRoute: typeof SettingsPrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings_/salah': {
+      id: '/settings_/salah'
+      path: '/settings/salah'
+      fullPath: '/settings/salah'
+      preLoaderRoute: typeof SettingsSalahRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings_/security': {
+      id: '/settings_/security'
+      path: '/settings/security'
+      fullPath: '/settings/security'
+      preLoaderRoute: typeof SettingsSecurityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings_/wali': {
+      id: '/settings_/wali'
+      path: '/settings/wali'
+      fullPath: '/settings/wali'
+      preLoaderRoute: typeof SettingsWaliRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -299,6 +439,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DiscoverRoute: DiscoverRoute,
   FeedRoute: FeedRoute,
+  GoldRoute: GoldRoute,
   MatchesRoute: MatchesRoute,
   MessagesRoute: MessagesRoute,
   OnboardingRoute: OnboardingRoute,
@@ -309,6 +450,12 @@ const rootRouteChildren: RootRouteChildren = {
   ChatIdRoute: ChatIdRoute,
   MatchIdRoute: MatchIdRoute,
   ProfileIdRoute: ProfileIdRoute,
+  SettingsBillingRoute: SettingsBillingRoute,
+  SettingsMenuRoute: SettingsMenuRoute,
+  SettingsPrivacyRoute: SettingsPrivacyRoute,
+  SettingsSalahRoute: SettingsSalahRoute,
+  SettingsSecurityRoute: SettingsSecurityRoute,
+  SettingsWaliRoute: SettingsWaliRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

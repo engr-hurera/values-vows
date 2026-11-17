@@ -30,6 +30,11 @@ export interface Account {
   phone?: string | undefined;
   authMethod?: AuthMethod | undefined;
   antiScreenshot?: boolean | undefined;
+  /** Settings switches (Screens 18–22), keyed by setting id. */
+  prefs?: Record<string, boolean> | undefined;
+  blockedNumbers?: string[] | undefined;
+  waliDigest?: "realtime" | "weekly" | undefined;
+  approvedViewers?: string[] | undefined;
 }
 
 export type AuthMethod = "phone" | "google" | "email";

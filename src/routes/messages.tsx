@@ -2,7 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Lock, Mic, ShieldCheck } from "lucide-react";
 import { BottomNav, PhoneShell } from "@/components/mawaddah/BottomNav";
 import { MatchAvatar } from "@/components/mawaddah/MatchAvatar";
-import { ACTIVE_CHAT_CAP, activeCount, findThread, guardianCC, timeAgo, useChatSession } from "@/lib/chat-store";
+import { ACTIVE_CHAT_CAP, activeCount, adabHoursLeft, chats, findThread, guardianCC, timeAgo, useChatSession } from "@/lib/chat-store";
+import { toast } from "sonner";
 import { getProfile } from "@/lib/profiles";
 import { cn } from "@/lib/utils";
 
@@ -10,9 +11,9 @@ export const Route = createFileRoute("/messages")({
   head: () => ({
     meta: [
       { title: "Messages — Mawaddah" },
-      { name: "description", content: "Chaperoned conversations with your matches, with Guardian CC and one-tap safety reporting." },
+      { name: "description", content: "Chaperoned conversations with your matches, with Wali CC and one-tap safety reporting." },
       { property: "og:title", content: "Messages — Mawaddah" },
-      { property: "og:description", content: "Chaperoned conversations with your matches, with Guardian CC and one-tap safety reporting." },
+      { property: "og:description", content: "Chaperoned conversations with your matches, with Wali CC and one-tap safety reporting." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
@@ -57,7 +58,7 @@ function Messages() {
         </div>
       </header>
 
-      <main className="flex-1 overflow-y-auto px-3 py-3">
+      <main className="-mt-4 flex-1 overflow-y-auto rounded-t-[2rem] bg-card px-3 py-4">
         {threads.length === 0 && <p className="p-8 text-center text-xs text-muted-foreground">No conversations yet. Open a match to start talking with adab.</p>}
         <ul className="space-y-1">
           {threads.map(({ t, p }) => {
@@ -66,11 +67,11 @@ function Messages() {
             return (
               <li key={t.profileId}>
                 <Link to="/chat/$id" params={{ id: t.profileId }} className="flex items-center gap-3 rounded-2xl px-2 py-3 transition hover:bg-secondary">
-                  <MatchAvatar profile={p!} className="h-12 w-12" />
+                  <MatchAvatar profile={p!} className="h-10 w-10 shrink-0" />
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-1.5">
                       <span className="truncate text-sm font-bold">{p!.name.split(" ")[0]}</span>
-                      {cc && <span className="flex shrink-0 items-center gap-0.5 rounded-full bg-trust-light px-1.5 py-0.5 text-[9px] font-bold text-trust"><ShieldCheck className="h-2.5 w-2.5" />Guardian CC</span>}
+                      {cc && <span className="flex shrink-0 items-center gap-0.5 rounded-full bg-trust-light px-1.5 py-0.5 text-[9px] font-bold text-trust"><ShieldCheck className="h-2.5 w-2.5" />Wali CC</span>}
                       {t.status === "frozen" && <span className="flex shrink-0 items-center gap-0.5 rounded-full bg-destructive/10 px-1.5 py-0.5 text-[9px] font-bold text-destructive"><Lock className="h-2.5 w-2.5" />Frozen</span>}
                       {t.status === "ended" && <span className="shrink-0 rounded-full bg-secondary px-1.5 py-0.5 text-[9px] font-bold text-muted-foreground">Ended</span>}
                     </div>
@@ -78,8 +79,14 @@ function Messages() {
                       {!last ? "Say salaam with adab…" : last.kind === "voice" ? <span className="inline-flex items-center gap-1"><Mic className="h-3 w-3" />Voice note · 0:{String(last.seconds ?? 0).padStart(2, "0")}</span> : `${last.from === "me" ? "You: " : ""}${last.text}`}
                     </p>
                   </div>
-                  <span className="shrink-0 self-start pt-1 text-[10px] font-semibold text-muted-foreground">{last ? timeAgo(last.at) : ""}</span>
+                  <span className="flex shrink-0 flex-col items-end gap-1 self-start pt-1">
+                    <span className="text-[10px] font-semibold text-muted-foreground">{last ? timeAgo(last.at) : ""}</span>
+                    {adabHoursLeft(t) !== null && <span className="rounded-full bg-accent-light px-1.5 py-0.5 text-[9px] font-bold text-accent">{adabHoursLeft(t)}h left</span>}
+                  </span>
                 </Link>
+                {t.status === "active" && (
+                  <button type="button" onClick={() => { chats.closeKindly(t.profileId); toast("Kind closure sent · slot freed"); }} className="ml-[3.75rem] mb-1 rounded-full border border-border px-2.5 py-1 text-[10px] font-bold text-muted-foreground hover:text-primary">🤲 1-Tap Kind Closure</button>
+                )}
               </li>
             );
           })}

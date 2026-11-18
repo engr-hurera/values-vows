@@ -100,6 +100,18 @@ export function reportAndFreeze(s: ChatState, id: string, reason = "Reported fro
   const report: SafetyReport = { id: `SR-${uid().toUpperCase().slice(0, 6)}`, profileId: id, at: now, reason };
   return { state: { ...patchThread(s, id, (t) => ({ ...t, status: "frozen" })), reports: [...s.reports, report] }, report };
 }
+export const KIND_CLOSURE_NOTE = "Assalamu alaikum. JazakAllahu khair for your time and sincere conversation. I do not feel we are the right match, so I will respectfully end our chat. May Allah grant you a righteous spouse. Ameen.";
+/** 1-Tap Kind Closure: sends a polite closing note and ends the chat, freeing one active slot. */
+export function kindClosure(s: ChatState, id: string, now = Date.now()): ChatState {
+  if (findThread(s, id)?.status !== "active") return s;
+  return patchThread(s, id, (t) => ({ ...t, status: "ended", messages: [...t.messages, { id: `closure-${id}-${now}`, from: "me", kind: "text", text: KIND_CLOSURE_NOTE, at: now }] }));
+}
+/** Hours left to reply under the 48h Adab rule, or null if nothing is waiting on me. */
+export function adabHoursLeft(t: Thread, now = Date.now()) {
+  const last = t.messages.at(-1);
+  if (t.status !== "active" || !last || last.from !== "them") return null;
+  return Math.max(0, Math.ceil(48 - (now - last.at) / 3_600_000));
+}
 export const endChat = (s: ChatState, id: string): ChatState => patchThread(s, id, (t) => (t.status === "active" ? { ...t, status: "ended" } : t));
 
 /** Guardian CC shows when the member added a Guardian WhatsApp number with updates on, or the match has a linked Wali. */
@@ -156,6 +168,7 @@ export const chats = {
   start: (id: string) => apply((s) => startChat(s, id)) as StartResult | null,
   send: (id: string, msg: Omit<ChatMessage, "id" | "from" | "at">) => apply((s) => ({ state: sendMessage(s, id, msg) })),
   reportAndFreeze: (id: string) => apply((s) => reportAndFreeze(s, id))?.report ?? null,
+  closeKindly: (id: string) => apply((s) => ({ state: kindClosure(s, id) })),
   end: (id: string) => apply((s) => ({ state: endChat(s, id) })),
 };
 

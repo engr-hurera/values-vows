@@ -29,6 +29,12 @@ export interface Profile {
   marital: string;
   /** Only true after a real identity check; no sample member has one. */
   verifiedId: boolean;
+  scholar: boolean;
+  revert: boolean;
+  visa: string;
+  household: [string, string][];
+  character: [string, string][];
+  prompts: { title: string; q: string; a: string }[];
 }
 
 type Roots = Pick<Profile, "currentCountry" | "bornCountry" | "ethnicity" | "sect" | "marital">;
@@ -53,7 +59,40 @@ const ROOTS: Record<string, Roots> = {
 
 const img = (id: string, w = 700) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=80`;
 
-const BASE: Omit<Profile, keyof Roots | "verifiedId">[] = [
+type Derived = "verifiedId" | "scholar" | "revert" | "visa" | "household" | "character" | "prompts";
+const pick = <T,>(list: T[], i: number) => list[i % list.length]!;
+const PROMPT_BANK = [
+  { title: "Deen & Home", q: "A home with barakah to me looks like…", a: "Fajr together, Quran after Maghrib, and a door open to family and guests." },
+  { title: "Family Boundaries", q: "How I balance parents and spouse…", a: "Honouring my parents while keeping our home's decisions between the two of us." },
+  { title: "Conflict & Mercy", q: "When we disagree, I…", a: "Take a short pause, make wudu, then talk calmly. We never sleep upset." },
+  { title: "Weekend Routine", q: "My ideal weekend…", a: "Halaqa on Saturday morning, a long walk, then cooking for the family." },
+  { title: "International Life", q: "Where I could see us living…", a: "Open to moving for the right home, ideally near a strong masjid community." },
+  { title: "Mahr & Nikah", q: "My idea of a blessed Nikah…", a: "A simple Sunnah Nikah with close family, and a mahr that brings ease." },
+];
+function derive(i: number): Pick<Profile, Exclude<Derived, "verifiedId">> {
+  return {
+    scholar: i % 3 === 0,
+    revert: i % 4 === 1,
+    visa: pick(["Able to sponsor a spouse visa", "Citizen · no sponsorship needed", "Requires visa sponsorship", "Not applicable"], i),
+    household: [
+      ["Living after Nikah", pick(["Independent separate home", "Open to in-laws temporarily", "Multi-generational"], i)],
+      ["Children plans", pick(["Wants children soon (1–2 yrs)", "Later", "Open to adoption"], i)],
+      ["Financial structure", pick(["Husband provides 100%", "Dual-income, shared expenses", "Wife keeps 100% of her income"], i)],
+      ["Riba stance", pick(["Strictly Riba-free", "Flexible"], i)],
+      ["Career & homemaking", pick(["Flexible depending on children", "Part-time / remote", "Full-time career", "Dedicated homemaker"], i)],
+      ["Pets", pick(["No pets", "Has a cat", "Allergic"], i)],
+    ],
+    character: [
+      ["Conflict style", pick(["Calm discussion immediately", "Short cooling-off first", "Involves a trusted elder"], i)],
+      ["Love language", pick(["Quality Time", "Acts of Service", "Words of Affirmation", "Gift Giving"], i)],
+      ["Social energy", pick(["Balanced mix", "Quiet homebody", "Social extrovert"], i)],
+      ["Health & fitness", pick(["Exercises regularly", "Walks daily", "Plays football weekly"], i)],
+    ],
+    prompts: [0, 1, 2].map((k) => pick(PROMPT_BANK, i + k * 2)),
+  };
+}
+
+const BASE: Omit<Profile, keyof Roots | Derived>[] = [
   {
     id: "amina", name: "Amina Bello", age: 26, gender: "woman", city: "Kano, Nigeria", profession: "Pharmacist",
     match: 94, distanceKm: 12.5, photo: img("photo-1534528741775-53994a69daeb"), privacyBlur: true,
@@ -168,7 +207,7 @@ const BASE: Omit<Profile, keyof Roots | "verifiedId">[] = [
   },
 ];
 
-export const PROFILES: Profile[] = BASE.map((p) => ({ ...p, ...ROOTS[p.id]!, verifiedId: false }));
+export const PROFILES: Profile[] = BASE.map((p, i) => ({ ...p, ...ROOTS[p.id]!, ...derive(i), verifiedId: false }));
 
 /** Woman-Only Blur Rule: only women who enabled privacy blur are blurred, until unblur is granted. Men are never blurred. */
 export function shouldBlur(p: Pick<Profile, "gender" | "privacyBlur">, unblurGranted = false) {
@@ -203,7 +242,7 @@ export interface Filters {
   marital: string;
   waliOnly: boolean;
   verifiedOnly: boolean;
-  value: "separateHome" | "salah5x" | "quranTafsir" | null;
+  value: "separateHome" | "salah5x" | "quranTafsir" | "scholar" | "revert" | null;
 }
 
 export const EMPTY_FILTERS: Filters = {

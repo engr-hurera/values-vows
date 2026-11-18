@@ -22,9 +22,10 @@ export const Route = createFileRoute("/discover")({
 });
 
 const VALUES: { key: NonNullable<Filters["value"]>; pre: string; label: string; icon: string; count: string }[] = [
-  { key: "separateHome", pre: "Aligned on", label: "Separate Home", icon: "🏡", count: "1.8k candidates" },
-  { key: "salah5x", pre: "Committed to", label: "5x Daily Salah", icon: "🕌", count: "3.4k candidates" },
-  { key: "quranTafsir", pre: "Interested in", label: "Quran & Tafsir", icon: "📖", count: "920 candidates" },
+  { key: "scholar", pre: "Hafiz, Alim &", label: "Student of Knowledge Hub", icon: "📖", count: "+84" },
+  { key: "revert", pre: "Revert / Convert", label: "Muslim Community Hub", icon: "🌙", count: "+112" },
+  { key: "separateHome", pre: "Aligned on", label: "Independent Separate Home", icon: "🏡", count: "+42" },
+  { key: "salah5x", pre: "Committed to", label: "5x Salah & Strictly Riba-Free", icon: "🕌", count: "+64" },
 ];
 
 function Discover() {
@@ -36,7 +37,7 @@ function Discover() {
       <header className="flex items-center justify-between px-5 pb-2 pt-6">
         <div>
           <p className="text-xs font-bold text-muted-foreground">📍 Near you</p>
-          <h1 className="text-xl font-extrabold">Discover by Values</h1>
+          <h1 className="text-xl font-extrabold">Discover Communities</h1>
         </div>
         <FiltersDrawer
           trigger={
@@ -59,13 +60,13 @@ function Discover() {
               <div className="space-y-2">
                 <span className="block text-sm font-bold">{v.pre} <span className="text-accent">{v.label}</span></span>
                 <div className="flex items-center">
-                  <div className="flex -space-x-2">
+                  <div className="flex -space-x-1.5">
                     {people.map((p) => (
-                      <img key={p.id} src={p.photo.replace("w=700", "w=80")} alt="" className={cn("h-7 w-7 rounded-full object-cover ring-2 ring-card", shouldBlur(p) && "blur-[3px]")} />
+                      <img key={p.id} src={p.photo.replace("w=700", "w=80")} alt="" className={cn("aspect-square h-[22px] w-[22px] shrink-0 rounded-full object-cover object-top ring-2 ring-card", shouldBlur(p) && "blur-[3px]")} />
                     ))}
-                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-accent-light text-[9px] font-extrabold text-accent ring-2 ring-card">+42</span>
+                    <span className="flex h-[22px] shrink-0 items-center justify-center rounded-full bg-accent-light px-1.5 text-[9px] font-extrabold text-accent ring-2 ring-card">{v.count}</span>
                   </div>
-                  <span className="ml-3 text-xs text-muted-foreground">{v.count}</span>
+                  <span className="ml-3 text-xs text-muted-foreground">members</span>
                 </div>
               </div>
               <span className="flex items-center gap-2">

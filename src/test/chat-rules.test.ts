@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { ACTIVE_CHAT_CAP, activeCount, connect, endChat, findThread, guardianCC, reportAndFreeze, seedState, sendMessage, startChat } from "@/lib/chat-store";
+import { ACTIVE_CHAT_CAP, activeCount, connect, endChat, findThread, guardianCC, reportAndFreeze, seedState, sendMessage, startChat, kindClosure, KIND_CLOSURE_NOTE } from "@/lib/chat-store";
 import { getProfile } from "@/lib/profiles";
 
 describe("Matches & chaperoned chat rules", () => {
@@ -55,5 +55,13 @@ describe("Matches & chaperoned chat rules", () => {
     expect(guardianCC({ guardianWhatsapp: "+2348000000000", guardianUpdates: true }, { waliLinked: false })).toBe(true);
     expect(guardianCC({ guardianWhatsapp: "", guardianUpdates: false }, { waliLinked: false })).toBe(false);
     expect(guardianCC({ guardianWhatsapp: "", guardianUpdates: false }, { waliLinked: true })).toBe(true);
+  });
+  it("kind closure sends a polite note and frees exactly one active slot", () => {
+    const before = seedState("woman", 1000);
+    const t = before.threads.find((x) => x.status === "active")!;
+    const after = kindClosure(before, t.profileId, 2000);
+    expect(activeCount(after)).toBe(activeCount(before) - 1);
+    expect(findThread(after, t.profileId)?.messages.at(-1)?.text).toBe(KIND_CLOSURE_NOTE);
+    expect(kindClosure(after, t.profileId, 3000)).toBe(after);
   });
 });

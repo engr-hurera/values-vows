@@ -22,7 +22,7 @@ function Security() {
   const blocked = a.blockedNumbers ?? [];
   const add = () => {
     const v = num.trim();
-    if (v.replace(/\D/g, "").length < 7) return toast("Enter a valid phone number");
+    if (v.replace(/\D/g, "").length < 7) { toast("Enter a valid phone number"); return; }
     if (!blocked.includes(v)) updateAccount({ blockedNumbers: [...blocked, v] });
     setNum("");
   };

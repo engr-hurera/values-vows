@@ -18,7 +18,7 @@ export function setPref(key: string, value: boolean) {
   updateAccount({ prefs: { ...(getAccount()?.prefs ?? {}), [key]: value } });
 }
 
-export function SettingsPage({ title, badge, back = "/settings/menu", children }: { title: string; badge?: string; back?: "/settings" | "/settings/menu"; children: React.ReactNode }) {
+export function SettingsPage({ title, badge, back = "/settings/menu", children }: { title: string; badge?: string | undefined; back?: "/settings" | "/settings/menu"; children: React.ReactNode }) {
   return (
     <PhoneShell>
       <header className="flex items-center justify-between border-b border-border px-5 py-4">

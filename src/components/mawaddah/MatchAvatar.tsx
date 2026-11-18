@@ -10,7 +10,7 @@ export function MatchAvatar({ profile, className, rounded = "rounded-full" }: { 
       <img
         src={profile.photo.replace("w=700", "w=300")}
         alt={blurred ? `${profile.name} (photo hidden for privacy)` : profile.name}
-        className={cn("h-full w-full object-cover", blurred && "scale-125 blur-md")}
+        className={cn("aspect-square h-full w-full shrink-0 object-cover object-top", blurred && "scale-125 blur-md")}
       />
       {blurred && (
         <span className="absolute inset-0 flex items-center justify-center bg-overlay/20 text-on-photo">

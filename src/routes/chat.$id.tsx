@@ -128,7 +128,7 @@ function Chat() {
           <MatchAvatar profile={p} className="h-10 w-10" />
           <div className="min-w-0">
             <p className="truncate text-sm font-extrabold">{first}, {p.age}</p>
-            {cc ? <p className="flex items-center gap-1 text-[10px] font-bold text-trust"><ShieldCheck className="h-3 w-3" />Guardian CC</p> : <p className="truncate text-[10px] text-muted-foreground">{p.profession}</p>}
+            {cc ? <p className="flex items-center gap-1 text-[10px] font-bold text-trust"><ShieldCheck className="h-3 w-3" />Wali CC</p> : <p className="truncate text-[10px] text-muted-foreground">{p.profession}</p>}
           </div>
         </Link>
         <button
@@ -174,7 +174,7 @@ function Chat() {
                 </button>
               ))}
             </div>
-            <button onClick={() => chats.end(id)} className="text-[10px] font-semibold text-muted-foreground underline-offset-2 hover:underline">End this chat (frees an active slot)</button>
+            <button onClick={() => chats.closeKindly(id)} className="text-[10px] font-semibold text-muted-foreground underline-offset-2 hover:underline">1-Tap Kind Closure (sends a polite note, frees a slot)</button>
           </>
         )}
         {micError && <p role="alert" className="text-[11px] text-destructive">{micError}</p>}

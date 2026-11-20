@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import * as SliderPrimitive from "@radix-ui/react-slider";
 import { ChevronDown, SlidersHorizontal } from "lucide-react";
 import { useState } from "react";
@@ -137,6 +138,9 @@ export function FiltersDrawer({ trigger }: { trigger?: React.ReactNode }) {
                 <PickRow gold label="Living after marriage" value={draft.living} onClick={() => pick("living")} />
                 <PickRow gold label="Marital history" value={draft.marital} onClick={() => pick("marital")} />
                 <ToggleRow label="Wali-supervised profiles only" checked={draft.waliOnly} onChange={(v) => set({ waliOnly: v })} />
+                {["Spousal visa & relocation", "Financial structure & Riba", "Polygamy stance"].map((l) => (
+                  <Link key={l} to="/gold" onClick={() => setOpen(false)} className="flex items-center justify-between px-3.5 py-2.5"><span className="font-semibold text-primary">{l}</span><span className="text-[9px] font-bold text-accent">👑 Unlock</span></Link>
+                ))}
                 <ToggleRow label="Verified Government ID only" checked={draft.verifiedOnly} onChange={(v) => set({ verifiedOnly: v })} />
               </div>
             </div>

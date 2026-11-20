@@ -35,7 +35,8 @@
 - [x] Selfie & Government ID row lives in Settings → Security & Verification (optional, no fake badge).
 
 # 23-screen showcase v2 (mawaddah_matrimonial_ui_showcase_2.html)
-- [ ] Onboarding 03–06: identity & visa rows (+ optional selfie row), Wali/polygamy/timeline/wedding step, photo grid, Deen titles + practice rows; multi-select picker.
-- [ ] 07–11: profile Visa badge, Household matrix, 3 prompts; 4 community hubs; Gold filters; Barakah Gold subscription page.
-- [ ] 12–15: matches, bridge, inbox (Kind Closure, 48h timer), voice note screen.
-- [ ] 16–22: Profile hub with readiness tracker + biodata PDF; settings directory + 5 detail pages.
+- [x] Onboarding 03–06: identity & visa rows (+ optional selfie row), Wali/polygamy/timeline/wedding step, photo grid, Deen titles + practice rows; multi-select picker.
+- [x] 07–11: profile Visa badge, Household matrix, 3 prompts; 4 community hubs; Gold filters; Barakah Gold subscription page.
+- [x] 12–15: matches, bridge, inbox (Kind Closure, 48h timer), voice note screen.
+- [x] 16–22: Profile hub with readiness tracker + biodata PDF; settings directory + 5 detail pages.
+- [ ] Deeper pixel pass on Screens 12–15 (bridge S-curve, dark voice-note screen) and real payments for Gold (needs user decision).

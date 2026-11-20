@@ -34,3 +34,4 @@ use the editor.
 - Onboarding completion uses a versioned flag set only by registration or explicit sign-in; the index always renders splash, so stale demo sessions cannot bypass entry.
 - Liveness verification is a separate protected Settings destination and never assigns a badge without an actual provider result, because a visual prototype is not identity verification.
 - Matches, proposals, chats and safety reports live in one device-local store with pure rule functions (cap, freeze, mutual match) kept separate from the hook, so rules are unit-testable and can move to a backend later.
+- Settings sub-pages use trailing-underscore routes (settings_.*) with the shared SettingsKit layout, and switches persist in Account.prefs, so new settings need no new storage.

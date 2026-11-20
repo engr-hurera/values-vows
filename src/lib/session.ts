@@ -32,6 +32,8 @@ export interface Account {
   antiScreenshot?: boolean | undefined;
   /** Settings switches (Screens 18–22), keyed by setting id. */
   prefs?: Record<string, boolean> | undefined;
+  /** Extra sign-up answers (visa, Wali, polygamy, Deen practice), keyed by question id. */
+  extras?: Record<string, string> | undefined;
   blockedNumbers?: string[] | undefined;
   waliDigest?: "realtime" | "weekly" | undefined;
   approvedViewers?: string[] | undefined;

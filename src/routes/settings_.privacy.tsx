@@ -18,7 +18,7 @@ export const Route = createFileRoute("/settings_/privacy")({
 function Privacy() {
   const a = useSettingsAccount();
   if (!a) return null;
-  const viewers = a.approvedViewers ?? PROFILES.slice(0, 2).map((p) => p.id);
+  const viewers = a.approvedViewers ?? PROFILES.filter((p) => p.gender === "man").slice(0, 2).map((p) => p.id);
   const people = viewers.map((id) => PROFILES.find((p) => p.id === id)).filter((p) => !!p);
   return (
     <SettingsPage title="Modesty & Photo Privacy" badge="Protected">

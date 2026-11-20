@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, MapPin, Pause, Play } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -87,6 +88,7 @@ function ProfileView() {
           </div>
         </div>
         <div className="relative z-10 -mt-5 space-y-6 rounded-t-[2rem] bg-card px-5 pb-8 pt-6">
+          <span className="inline-flex rounded-full border border-accent-border bg-accent-light px-3 py-1 text-[11px] font-bold text-accent">🛂 {p.visa}</span>
           <VoiceIntro />
           <section>
             <h3 className="mb-1 text-xs font-bold text-muted-foreground">About</h3>
@@ -99,6 +101,12 @@ function ProfileView() {
               <span className="rounded-full bg-trust-light px-3 py-1.5 text-xs font-bold text-trust">💍 {p.timeline}</span>
               {p.willingToRelocate && <span className="rounded-full bg-trust-light px-3 py-1.5 text-xs font-bold text-trust">✈️ Willing to Relocate</span>}
             </div>
+          </section>
+          <MatrixCard title="Household, Finances & Family Roles" rows={p.household} />
+          <MatrixCard title="Character & Psychology" rows={p.character} />
+          <section className="space-y-2">
+            <h3 className="text-xs font-bold text-muted-foreground">Conversation Starters · tap to reply</h3>
+            {p.prompts.map((q) => <PromptCard key={q.title} prompt={q} name={p.name.split(" ")[0]!} />)}
           </section>
           <section className="space-y-2">
             <h3 className="text-xs font-bold text-muted-foreground">Values & Interests</h3>
@@ -116,5 +124,36 @@ function ProfileView() {
       </div>
       <BottomNav active="home" />
     </PhoneShell>
+  );
+}
+
+function MatrixCard({ title, rows }: { title: string; rows: [string, string][] }) {
+  return (
+    <section className="space-y-2 rounded-3xl border border-border bg-secondary p-4">
+      <h3 className="text-xs font-extrabold text-primary">{title}</h3>
+      <dl className="divide-y divide-border">
+        {rows.map(([k, v]) => <div key={k} className="flex justify-between gap-3 py-2 text-xs"><dt className="text-muted-foreground">{k}</dt><dd className="text-right font-bold text-primary">{v}</dd></div>)}
+      </dl>
+    </section>
+  );
+}
+
+function PromptCard({ prompt, name }: { prompt: { title: string; q: string; a: string }; name: string }) {
+  const [open, setOpen] = useState(false);
+  const [text, setText] = useState("");
+  return (
+    <div className="rounded-3xl border border-border bg-card p-4">
+      <button type="button" onClick={() => setOpen(!open)} className="w-full text-left">
+        <span className="block text-[10px] font-bold uppercase tracking-wider text-accent">{prompt.title}</span>
+        <span className="block text-xs font-bold text-muted-foreground">{prompt.q}</span>
+        <span className="mt-1 block text-sm font-semibold text-primary">"{prompt.a}"</span>
+      </button>
+      {open && (
+        <div className="mt-3 flex gap-2">
+          <input value={text} onChange={(e) => setText(e.target.value)} aria-label={`Reply to ${name}`} placeholder={`Reply to ${name} with adab…`} className="min-w-0 flex-1 rounded-full border border-border bg-secondary px-3.5 py-2 text-xs text-primary" />
+          <button type="button" disabled={!text.trim()} onClick={() => { toast(`Reply sent with your proposal to ${name}`); setText(""); setOpen(false); }} className="rounded-full bg-primary px-4 text-xs font-bold text-primary-foreground disabled:opacity-40">Send</button>
+        </div>
+      )}
+    </div>
   );
 }

@@ -83,10 +83,10 @@ function Feed() {
               <button aria-label="Pass" onClick={() => actions.dismiss(p.id)} className="flex h-14 w-14 items-center justify-center rounded-full border border-border bg-card text-primary shadow-float transition hover:scale-105">
                 <X className="h-6 w-6" />
               </button>
-              <button aria-label="Bookmark" aria-pressed={bookmarked.includes(p.id)} onClick={() => actions.bookmark(p.id)} className="flex h-16 w-16 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-float transition hover:scale-105">
+              <button aria-label="Shortlist" aria-pressed={bookmarked.includes(p.id)} onClick={() => actions.bookmark(p.id)} className="flex h-16 w-16 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-float transition hover:scale-105">
                 <Star className={cn("h-6 w-6", bookmarked.includes(p.id) && "fill-current text-accent")} />
               </button>
-              <button aria-label="Connect" onClick={() => connect(p.id, p.name)} className="flex h-14 w-14 items-center justify-center rounded-full bg-accent text-accent-foreground shadow-float transition hover:scale-105">
+              <button aria-label="Propose" onClick={() => connect(p.id, p.name)} className="flex h-14 w-14 items-center justify-center rounded-full bg-accent text-accent-foreground shadow-float transition hover:scale-105">
                 <Heart className="h-6 w-6 fill-current" />
               </button>
             </div>

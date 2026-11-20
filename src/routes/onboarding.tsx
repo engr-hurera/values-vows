@@ -7,7 +7,7 @@ import { RefField as Field, ReferenceShell } from "@/components/mawaddah/Referen
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { canAdvance, MIN_AGE, ageFrom } from "@/lib/onboarding";
-import { splitCountry, type PickerType } from "@/lib/picker-options";
+import { splitCountry, type PickerType , PICKER_DATASETS } from "@/lib/picker-options";
 import { clearPendingAuth, defaultBlurFor, getPendingAuth, guardianUpdatesDefault, register, type Gender, type PendingAuth } from "@/lib/session";
 import { cn } from "@/lib/utils";
 
@@ -63,6 +63,8 @@ function Onboarding() {
   const [guardianName, setGuardianName] = useState(""); const [guardianWhatsapp, setGuardianWhatsapp] = useState(""); const [guardianUpdates, setGuardianUpdates] = useState(false);
   const [photos, setPhotos] = useState<string[]>(Array(6).fill("")); const [blur, setBlur] = useState(true); const [watermark, setWatermark] = useState(true);
   const [practice, setPractice] = useState<string[]>([]); const [sect, setSect] = useState(""); const [showSects, setShowSects] = useState(false);
+  const [extras, setExtras] = useState<Record<string, string>>({}); const ex = (k: string) => extras[k] ?? ""; const setEx = (k: string) => (v: string) => setExtras(o => ({ ...o, [k]: v }));
+  const xp = (type: PickerType, k: string, title: string, multi = false) => setPicker({ type, title, value: ex(k), multi, onSelect: setEx(k) });
   const [living, setLiving] = useState("Separate Home"); const [timeline, setTimeline] = useState("");
   const [voice, setVoice] = useState(""); const [voiceSecs, setVoiceSecs] = useState(0); const [voiceSample, setVoiceSample] = useState(false);
   const [recording, setRecording] = useState(false); const [playing, setPlaying] = useState(false);
@@ -92,7 +94,7 @@ function Onboarding() {
       height: height || undefined, maritalStatus: marital, bornCountry, ethnicity, languages: languages.split(",").map(l => l.trim()).filter(Boolean),
       guardianName: guardianName.trim(), guardianWhatsapp: guardianWhatsapp.trim(), guardianUpdates: !!guardianWhatsapp.trim() && guardianUpdates,
       photo: photos.find(Boolean), photos: photos.filter(Boolean), privacyBlur: gender === "woman" && blur, antiScreenshot: watermark,
-      sect, timeline, practice, living, voiceIntro: voice || undefined,
+      sect, timeline, practice, living, voiceIntro: voice || undefined, extras,
       email: auth.method === "phone" ? "" : auth.email.trim(), phone: auth.method === "phone" ? auth.phone.trim() : undefined, authMethod: auth.method, password: auth.password,
     });
     clearPendingAuth();
@@ -161,6 +163,9 @@ function Onboarding() {
               </div>
               <PickRow tight label="Height" value={height} onClick={() => openPicker("height", "Select Height", height, setHeight)}/>
               <PickRow tight label="Marital status" value={marital} onClick={() => openPicker("marital", "Marital Status", marital, setMarital)}/>
+              <PickRow tight label="Existing children" value={ex("children")} onClick={() => xp("children", "children", "Existing Children")}/>
+              <PickRow tight label="Education" value={ex("education")} onClick={() => xp("education", "education", "Education Level")}/>
+              <label className="px-3 py-2 flex items-center justify-between gap-2 bg-card"><span className="text-muted-foreground font-medium shrink-0">Profession</span><input type="text" value={ex("profession")} onChange={e => setEx("profession")(e.target.value)} placeholder="e.g. Architect" className="text-right font-bold text-primary placeholder:font-semibold placeholder:text-muted-foreground"/></label>
             </div>
           </div>
 
@@ -176,6 +181,20 @@ function Onboarding() {
               <PickRow accent label="Languages" value={languages} onClick={() => setPicker({ type: "language", title: "Languages Spoken", value: languages, multi: true, onSelect: setLanguages })}/>
             </div>
           </div>
+
+          <div className="space-y-1">
+            <span className="text-[7px] font-bold uppercase tracking-wider text-muted-foreground px-1 block">Visa &amp; Relocation Logistics</span>
+            <div className="rounded-2xl bg-card border border-border divide-y divide-border overflow-hidden text-[8px]">
+              <PickRow accent label="Residency status" value={ex("residency")} onClick={() => xp("residency", "residency", "Residency / Legal Status")}/>
+              <PickRow accent label="Willing to relocate" value={ex("relocate")} onClick={() => xp("relocate", "relocate", "Willingness to Relocate")}/>
+              <PickRow accent label="Spousal visa" value={ex("visaSponsor")} onClick={() => xp("visaSponsor", "visaSponsor", "Spousal Visa Sponsorship")}/>
+            </div>
+          </div>
+
+          <div className="px-3 py-2 rounded-2xl border border-border bg-secondary flex items-center justify-between gap-2 text-[8px]">
+            <span><span className="block font-bold text-primary">📸 Selfie Liveness &amp; Govt ID</span><span className="block text-[6.5px] text-muted-foreground">Optional · human-reviewed, never public. Do it later in Settings.</span></span>
+            <span className="shrink-0 px-2 py-0.5 rounded-full bg-card border border-border text-[6.5px] font-bold text-muted-foreground">Optional</span>
+          </div>
         </>}
 
         {step === 1 && <>
@@ -187,6 +206,11 @@ function Onboarding() {
           <div className="p-2.5 rounded-2xl bg-secondary border border-border space-y-1">
             <div className="flex items-center justify-between gap-3"><span className="text-[8px] font-bold text-primary">Send chat messages &amp; updates to Guardian on WhatsApp</span><Switch className="reference-toggle shrink-0" aria-label="Send chat messages & updates to Guardian on WhatsApp" checked={guardianUpdates} disabled={!guardianWhatsapp.trim()} onCheckedChange={setGuardianUpdates}/></div>
             <span className="text-[6.5px] text-muted-foreground block">You can change or update this anytime later in Settings.</span>
+          </div>
+          <div className="rounded-2xl bg-card border border-border divide-y divide-border overflow-hidden text-[8px]">
+            <PickRow accent label="Wali involvement" value={ex("waliMode")} onClick={() => xp("waliMode", "waliMode", "Wali / Guardian Involvement")}/>
+            <PickRow accent label="Polygamy stance" value={ex("polygamy")} onClick={() => xp(gender === "woman" ? "polygamyWoman" : "polygamyMan", "polygamy", gender === "woman" ? "Polygamy Stance (Woman)" : "Polygamy Stance (Man)")}/>
+            <PickRow accent label="Wedding & Mahr style" value={ex("wedding")} onClick={() => xp("wedding", "wedding", "Wedding & Mahr Style")}/>
           </div>
         </>}
 
@@ -205,6 +229,18 @@ function Onboarding() {
         </>}
 
         {step === 3 && <>
+          <div className="space-y-1"><span className="text-[7px] font-bold uppercase text-muted-foreground block">Islamic Titles &amp; Achievements</span>
+            <div className="flex flex-wrap gap-1.5">{PICKER_DATASETS.titles.map(({ label: t }) => { const on = ex("titles").split(", ").includes(t); return <Pill key={t} on={on} onClick={() => { const cur = ex("titles").split(", ").filter(Boolean); setEx("titles")((on ? cur.filter(x => x !== t) : t === "None" ? ["None"] : [...cur.filter(x => x !== "None"), t]).join(", ")); }}>{t}</Pill>; })}</div>
+          </div>
+          <div className="rounded-2xl bg-card border border-border divide-y divide-border overflow-hidden text-[8px]">
+            <PickRow accent label="Madhab" value={ex("madhab")} onClick={() => xp("madhab", "madhab", "Madhab")}/>
+            <PickRow accent label="Prayer (Salah)" value={ex("salahLevel")} onClick={() => xp("salahLevel", "salahLevel", "Prayer Consistency")}/>
+            <PickRow accent label="Quran & learning" value={ex("quran")} onClick={() => xp("quran", "quran", "Quran & Islamic Learning")}/>
+            <PickRow accent label="Modesty" value={ex("modesty")} onClick={() => xp(gender === "woman" ? "modestyWoman" : "modestyMan", "modesty", gender === "woman" ? "Modesty (Woman)" : "Modesty (Man)")}/>
+            <PickRow accent label="Diet" value={ex("diet")} onClick={() => xp("diet", "diet", "Dietary Strictness")}/>
+            <PickRow accent label="Substances" value={ex("substances")} onClick={() => xp("substances", "substances", "Substances")}/>
+            <PickRow accent label="Music" value={ex("music")} onClick={() => xp("music", "music", "Music & Entertainment")}/>
+          </div>
           <div className="space-y-1.5"><span className="text-[7px] font-bold uppercase text-muted-foreground block">Daily Salah &amp; Practice</span>
             <div className="flex flex-nowrap gap-1.5">
               <Pill on={practice.includes(SALAH)} onClick={() => togglePractice(SALAH)}>{SALAH}</Pill>

@@ -1,6 +1,6 @@
 /** Option lists for the Custom Dropdown Picker, copied from the showcase plus the regions our members come from. */
 export interface PickerOption { label: string; sub: string }
-export type PickerType = "country" | "ethnicity" | "language" | "height" | "marital" | "sect" | "living";
+export type PickerType = "country" | "ethnicity" | "language" | "height" | "marital" | "sect" | "living" | "children" | "education" | "residency" | "relocate" | "visaSponsor" | "waliMode" | "wedding" | "polygamyMan" | "polygamyWoman" | "titles" | "madhab" | "salahLevel" | "quran" | "modestyWoman" | "modestyMan" | "diet" | "substances" | "music";
 
 /** Shown at the top of filter pickers; selecting it clears that filter. */
 export const ANY = "Any";
@@ -14,6 +14,24 @@ const heights = Array.from({ length: 30 }, (_, i) => {
 });
 
 export const PICKER_DATASETS: Record<PickerType, PickerOption[]> = {
+  children: [{ label: "No children", sub: "" }, { label: "Has children living with me", sub: "" }, { label: "Has children not living with me", sub: "" }],
+  education: [{ label: "High School", sub: "" }, { label: "Bachelor's", sub: "" }, { label: "Master's", sub: "" }, { label: "Doctorate", sub: "" }, { label: "Islamic Seminary (Alim/Alimah)", sub: "" }],
+  residency: [{ label: "Citizen", sub: "" }, { label: "Permanent Resident", sub: "" }, { label: "Work Visa", sub: "" }, { label: "Student Visa", sub: "" }, { label: "Living in Home Country", sub: "" }],
+  relocate: [{ label: "Will not relocate", sub: "" }, { label: "Within current country", sub: "" }, { label: "Specific regions: GCC / UK / EU / NA / Asia", sub: "" }, { label: "Worldwide", sub: "" }],
+  visaSponsor: [{ label: "Able to sponsor a spouse visa", sub: "" }, { label: "Requires visa sponsorship", sub: "" }, { label: "Not applicable", sub: "" }],
+  waliMode: [{ label: "Wali present in chat from day one", sub: "" }, { label: "Wali notified upon matching", sub: "" }, { label: "Family introduced after initial chat", sub: "" }],
+  wedding: [{ label: "Simple Sunnah Nikah (low-key)", sub: "" }, { label: "Moderate family gathering", sub: "" }, { label: "Traditional cultural wedding", sub: "" }, { label: "Flexible", sub: "" }],
+  polygamyMan: [{ label: "Strictly monogamous, seeking only 1 wife", sub: "" }, { label: "Currently married, seeking 2nd/3rd/4th wife", sub: "" }, { label: "Open to polygamy in the future", sub: "" }],
+  polygamyWoman: [{ label: "Strictly monogamous, will not accept co-wives", sub: "" }, { label: "Open to being a co-wife", sub: "" }],
+  titles: [{ label: "Hafiz / Hafiza", sub: "" }, { label: "Alim / Alimah", sub: "" }, { label: "Student of Knowledge", sub: "" }, { label: "Revert / Convert", sub: "" }, { label: "None", sub: "" }],
+  madhab: [{ label: "Hanafi", sub: "" }, { label: "Shafi'i", sub: "" }, { label: "Maliki", sub: "" }, { label: "Hanbali", sub: "" }, { label: "No specific Madhab", sub: "" }],
+  salahLevel: [{ label: "Always prays 5 times daily", sub: "" }, { label: "Prays most daily prayers", sub: "" }, { label: "Working on praying 5 times", sub: "" }, { label: "Jummah & Eid only", sub: "" }],
+  quran: [{ label: "Reads Quran daily", sub: "" }, { label: "Attends weekly halaqas / classes", sub: "" }, { label: "Learns independently", sub: "" }],
+  modestyWoman: [{ label: "Wears Niqab", sub: "" }, { label: "Wears Hijab", sub: "" }, { label: "Modest clothing, no hijab", sub: "" }, { label: "Working towards Hijab", sub: "" }],
+  modestyMan: [{ label: "Full Sunnah beard", sub: "" }, { label: "Trimmed beard", sub: "" }, { label: "Clean-shaven", sub: "" }, { label: "Lowering gaze", sub: "" }],
+  diet: [{ label: "Strictly Zabiha Halal only", sub: "" }, { label: "General Halal", sub: "" }, { label: "Vegetarian / seafood outside", sub: "" }],
+  substances: [{ label: "Never smokes or drinks", sub: "" }, { label: "Vapes / hookah occasionally", sub: "" }, { label: "Trying to quit", sub: "" }],
+  music: [{ label: "Avoids music completely", sub: "" }, { label: "Listens occasionally", sub: "" }, { label: "No restriction", sub: "" }],
   country: [
     { label: "Australia", sub: "Sydney · Melbourne" },
     { label: "Austria", sub: "Vienna" },
